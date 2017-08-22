@@ -44,7 +44,7 @@ namespace OSS.Http.Extention
             T t;
             try
             {
-                var resp = await request.RestSend(client);
+                var resp = request.RestSend(client).Result;
                 t = await formatFunc(resp);
             }
             catch (Exception ex)
