@@ -3,13 +3,14 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Version>1.2.1</Version>
-    <PackageReleaseNotes>添加注释</PackageReleaseNotes>
+    <PackageReleaseNotes>优化移除方法</PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/KevinWG/OSS.Tools</PackageProjectUrl>
     <PackageIconUrl>http://img1.osscore.cn/static/oss_net.png</PackageIconUrl>
     <RepositoryUrl>https://github.com/KevinWG/OSS.Tools</RepositoryUrl>
     <Authors>OSSCore</Authors>
     <Company>OSSCore</Company>
     <Description>Redis Cache 操作工具类库</Description>
+    <PackageVersion>1.2.2</PackageVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -18,8 +19,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="3.1.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="5.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
   <ItemGroup>

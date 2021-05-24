@@ -30,7 +30,6 @@ namespace OSS.Tools.Cache
         /// <returns>是否添加成功</returns>
         Task<bool> SetAsync<T>(string key, T obj, CacheTimeOptions cacheOpt);
 
-
         /// <summary>
         /// 获取缓存对象
         /// </summary>
@@ -44,6 +43,6 @@ namespace OSS.Tools.Cache
         /// </summary>
         /// <param name="key"></param>
         /// <returns>是否成功</returns>
-        Task<bool> RemoveAsync(string key);
+        Task<bool> RemoveAsync(params string[] key);
     }
 }

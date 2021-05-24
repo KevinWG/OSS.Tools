@@ -38,7 +38,7 @@ namespace OSS.Tools.Cache
         /// </summary>
         /// <param name="sourceName"></param>
         /// <returns></returns>
-        public static IToolCache GetCache(string sourceName)
+        public static IToolCache GetCache(string sourceName= "default")
         {
             if (string.IsNullOrEmpty(sourceName))
                 sourceName = "default";
@@ -271,7 +271,7 @@ namespace OSS.Tools.Cache
         /// <returns></returns>
         public static async Task<RType> GetOrSetAsync<RType>(string cacheKey, Func<Task<RType>> getFunc
             , TimeSpan? slidingExpiration, TimeSpan? absoluteExpiration,
-            Func<RType, bool> hitProtectCondition, int hitProtectSeconds, string sourceName)
+            Func<RType, bool> hitProtectCondition, int hitProtectSeconds, string sourceName= "default")
         {
             if (getFunc == null)
                 throw new ArgumentNullException("获取原始数据方法(getFunc)不能为空!");
@@ -306,6 +306,17 @@ namespace OSS.Tools.Cache
         public static Task<bool> RemoveAsync(string key, string sourceName = "default")
         {
             return GetCache(sourceName).RemoveAsync(key);
+        }
+        
+        /// <summary>
+        /// 移除缓存对象
+        /// </summary>
+        /// <param name="keys"></param>
+        /// <param name="sourceName">来源名称</param>
+        /// <returns>是否成功</returns>
+        public static Task<bool> RemoveAsync(string[] keys, string sourceName = "default")
+        {
+            return GetCache(sourceName).RemoveAsync(keys);
         }
 
         [Obsolete("请使用 RemoveAsync")]

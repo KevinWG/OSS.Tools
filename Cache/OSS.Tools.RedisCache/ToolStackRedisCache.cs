@@ -74,11 +74,14 @@ namespace OSS.Tools.RedisCache
         /// <summary>
         ///  移除缓存实现
         /// </summary>
-        /// <param name="key"></param>
+        /// <param name="keys"></param>
         /// <returns></returns>
-        public async Task<bool> RemoveAsync(string key)
+        public async Task<bool> RemoveAsync(params string[] keys)
         {
-            await _cache.RemoveAsync(key);
+            foreach (var key in keys)
+            {
+                await _cache.RemoveAsync(key);
+            }
             return true;
         }
     }
