@@ -63,9 +63,12 @@ namespace OSS.Tools.Cache
         /// </summary>
         /// <param name="key"></param>
         /// <returns>是否成功</returns>
-        public Task<bool> RemoveAsync(params string[] key)
+        public Task<bool> RemoveAsync(params string[] keys)
         {
-            _cache.Remove(key);
+            foreach (var key in keys)
+            {
+                _cache.Remove(key);
+            }
             return Task.FromResult(true);
         }
     }

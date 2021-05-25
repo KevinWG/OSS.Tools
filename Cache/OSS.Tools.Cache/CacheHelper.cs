@@ -200,7 +200,7 @@ namespace OSS.Tools.Cache
         /// <param name="sourceName">来源名称</param>
         /// <returns></returns>
         public static async Task<RType> GetOrSetAsync<RType>(string cacheKey, Func<Task<RType>> createFunc
-            , TimeSpan? slidingExpiration, TimeSpan? absoluteExpiration, string sourceName)
+            , TimeSpan? slidingExpiration, TimeSpan? absoluteExpiration, string sourceName = "default")
         {
             var obj = await GetAsync<RType>(cacheKey, sourceName);
             if (obj != null && !obj.Equals(default(RType)))
