@@ -52,35 +52,6 @@ namespace OSS.Tools.Cache
 
         #region 缓存添加
 
-        /// <summary> 
-        /// 添加滚动过期缓存，如果存在则更新
-        /// </summary>
-        /// <typeparam name="T">添加缓存对象类型</typeparam>
-        /// <param name="key">添加对象的key</param>
-        /// <param name="obj">值</param>
-        /// <param name="slidingExpiration">滚动过期时长，访问后自动延长</param>
-        /// <param name="sourceName">来源名称</param>
-        /// <returns>是否添加成功</returns>
-        [Obsolete("请使用 SetAsync")]
-        public static bool Set<T>(string key, T obj, TimeSpan slidingExpiration,string sourceName = "default")
-        {
-            return SetAsync(key, obj, slidingExpiration,sourceName).Result;
-        }
-
-        /// <summary>
-        /// 添加固定过期时间缓存，如果存在则更新
-        /// </summary>
-        /// <typeparam name="T">添加缓存对象类型</typeparam>
-        /// <param name="key">添加对象的key</param>
-        /// <param name="obj">值</param>
-        /// <param name="absoluteExpiration"> 固定过期时长，设置后到时过期 </param>
-        /// <param name="sourceName">来源名称</param>
-        /// <returns>是否添加成功</returns>
-        [Obsolete("请使用 SetAbsoluteAsync")]
-        public static bool Set<T>(string key, T obj, DateTime absoluteExpiration,string sourceName = "default")
-        {
-            return SetAbsoluteAsync(key,obj,TimeSpan.FromTicks((absoluteExpiration-DateTime.Now).Ticks),sourceName).Result;
-        }
 
         /// <summary> 
         /// 添加滚动过期缓存，如果存在则更新
@@ -118,7 +89,7 @@ namespace OSS.Tools.Cache
         /// <param name="key">添加对象的key</param>
         /// <param name="obj">值</param>
         /// <param name="slidingExpiration">滚动过期时长，访问后自动延长，如果同时设置固定过期，则只能在固定时长范围内延长</param>
-        /// <param name="absoluteExpiration">固定过期时长，设置后到时过期</param>
+        /// <param name="maxAbsoluteExpiration">固定过期时长，设置后到时过期</param>
         /// <param name="sourceName"></param>
         /// <returns></returns>
         public static Task<bool> SetAsync<T>(string key, T obj,
@@ -130,23 +101,11 @@ namespace OSS.Tools.Cache
                 SlidingExpiration               = slidingExpiration
             });
         }
+
         #endregion
 
         #region 缓存获取
-
-        /// <summary>
-        /// 获取缓存对象
-        /// </summary>
-        /// <typeparam name="T">获取缓存对象类型</typeparam>
-        /// <param name="key">key</param>
-        /// <param name="sourceName">来源名称</param>
-        /// <returns>获取指定key对应的值 </returns>
-        [Obsolete("请使用 GetAsync")]
-        public static T Get<T>(string key, string sourceName = "default")
-        {
-            return GetAsync<T>(key,sourceName).Result;
-        }
-
+        
         /// <summary>
         /// 获取缓存对象
         /// </summary>
@@ -211,9 +170,9 @@ namespace OSS.Tools.Cache
 
             var data = await createFunc.Invoke();
             if (data == null || data.Equals(default(RType)))
-                return default;
+                return data;
 
-            await SetAsync(cacheKey, data, absoluteExpiration, slidingExpiration, sourceName);
+            await SetAsync(cacheKey, data, slidingExpiration, absoluteExpiration, sourceName);
             return data;
         }
 
@@ -290,7 +249,7 @@ namespace OSS.Tools.Cache
             }
 
             var cacheData = new ProtectCacheData<RType>(data);
-            await SetAsync(cacheKey, cacheData, absoluteExpiration, slidingExpiration, sourceName);
+            await SetAsync(cacheKey, cacheData, slidingExpiration, absoluteExpiration, sourceName);
 
             return data;
         }
@@ -319,11 +278,61 @@ namespace OSS.Tools.Cache
             return GetCache(sourceName).RemoveAsync(keys);
         }
 
+
+
+        #region 过时方法
+
+        /// <summary>
+        /// 获取缓存对象
+        /// </summary>
+        /// <typeparam name="T">获取缓存对象类型</typeparam>
+        /// <param name="key">key</param>
+        /// <param name="sourceName">来源名称</param>
+        /// <returns>获取指定key对应的值 </returns>
+        [Obsolete("请使用 GetAsync")]
+        public static T Get<T>(string key, string sourceName = "default")
+        {
+            return GetAsync<T>(key, sourceName).Result;
+        }
+
+
         [Obsolete("请使用 RemoveAsync")]
         public static bool Remove(string key, string sourceName = "default")
         {
             return RemoveAsync(key,sourceName).Result;
         }
+        
+        /// <summary> 
+        /// 添加滚动过期缓存，如果存在则更新
+        /// </summary>
+        /// <typeparam name="T">添加缓存对象类型</typeparam>
+        /// <param name="key">添加对象的key</param>
+        /// <param name="obj">值</param>
+        /// <param name="slidingExpiration">滚动过期时长，访问后自动延长</param>
+        /// <param name="sourceName">来源名称</param>
+        /// <returns>是否添加成功</returns>
+        [Obsolete("请使用 SetAsync")]
+        public static bool Set<T>(string key, T obj, TimeSpan slidingExpiration, string sourceName = "default")
+        {
+            return SetAsync(key, obj, slidingExpiration, sourceName).Result;
+        }
+
+        /// <summary>
+        /// 添加固定过期时间缓存，如果存在则更新
+        /// </summary>
+        /// <typeparam name="T">添加缓存对象类型</typeparam>
+        /// <param name="key">添加对象的key</param>
+        /// <param name="obj">值</param>
+        /// <param name="absoluteExpiration"> 固定过期时长，设置后到时过期 </param>
+        /// <param name="sourceName">来源名称</param>
+        /// <returns>是否添加成功</returns>
+        [Obsolete("请使用 SetAbsoluteAsync")]
+        public static bool Set<T>(string key, T obj, DateTime absoluteExpiration, string sourceName = "default")
+        {
+            return SetAbsoluteAsync(key, obj, TimeSpan.FromTicks((absoluteExpiration - DateTime.Now).Ticks), sourceName).Result;
+        }
+        
+        #endregion
     }
 
 
@@ -333,7 +342,6 @@ namespace OSS.Tools.Cache
         {
             Data = data;
         }
-
         public TT Data { get;  }
     }
 }
