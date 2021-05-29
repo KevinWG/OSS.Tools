@@ -17,11 +17,7 @@ namespace OSS.Tools.DataStack
         /// <returns></returns>
         public Task<bool> Push(TData data)
         {
-            Task.Factory.StartNew((obj) =>
-            {
-                _poper?.Pop((TData)obj);
-
-            }, data);
+            Task.Factory.StartNew((obj) => { _poper?.Pop((TData) obj); }, data).ConfigureAwait(false);
             return Task.FromResult(true);
         }
     }
