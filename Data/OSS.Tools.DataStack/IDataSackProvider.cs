@@ -1,6 +1,9 @@
 ﻿
 namespace OSS.Tools.DataStack
 {
+    /// <summary>
+    ///  数据堆栈提供者
+    /// </summary>
     public interface IDataSackProvider
     {
         /// <summary>
