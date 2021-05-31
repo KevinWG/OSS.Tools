@@ -2,9 +2,17 @@
 
 namespace OSS.Tools.DataStack
 {
+    /// <summary>
+    ///  默认数据堆栈
+    /// </summary>
+    /// <typeparam name="TData"></typeparam>
     public class DefaultDataStack<TData> : IStackPusher<TData>
     {
         private IStackPoper<TData> _poper;
+        /// <summary>
+        ///  构造函数
+        /// </summary>
+        /// <param name="poper"></param>
         public DefaultDataStack(IStackPoper<TData> poper)
         {
             _poper = poper;
@@ -17,7 +25,7 @@ namespace OSS.Tools.DataStack
         /// <returns></returns>
         public Task<bool> Push(TData data)
         {
-            Task.Factory.StartNew((obj) => { _poper?.Pop((TData) obj); }, data).ConfigureAwait(false);
+            Task.Factory.StartNew((obj) => { _poper?.Pop((TData) obj); }, data);
             return Task.FromResult(true);
         }
     }

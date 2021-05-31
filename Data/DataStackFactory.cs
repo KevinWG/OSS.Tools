@@ -3,6 +3,9 @@ using System.Threading.Tasks;
 
 namespace OSS.Tools.DataStack
 {
+    /// <summary>
+    ///  数据堆栈创建者
+    /// </summary>
     public static class DataStackFactory
     {
         /// <summary>
