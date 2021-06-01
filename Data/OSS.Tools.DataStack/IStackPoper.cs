@@ -3,6 +3,10 @@ using System.Threading.Tasks;
 
 namespace OSS.Tools.DataStack
 {
+    /// <summary>
+    ///  数据堆的pop接口
+    /// </summary>
+    /// <typeparam name="TData"></typeparam>
     public interface IStackPoper<TData>
     {
         /// <summary>

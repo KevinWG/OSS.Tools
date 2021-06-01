@@ -11,8 +11,9 @@ namespace OSS.Tools.DataStack
         /// </summary>
         /// <typeparam name="TData"></typeparam>
         /// <param name="poper"> 当前堆栈pop时的回调函数 </param>
+        /// <param name="stackKey"> 堆栈key  </param>
         /// <param name="sourceName"></param>
         /// <returns> 返回当前堆栈的Push接口实现 </returns>
-        IStackPusher<TData> CreateStack<TData>(IStackPoper<TData> poper, string sourceName = "default");
+        IStackPusher<TData> CreateStack<TData>(IStackPoper<TData> poper,string stackKey, string sourceName = "default");
     }
 }
