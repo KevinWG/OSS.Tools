@@ -18,7 +18,7 @@
     <ProjectReference Include="..\..\Cache\OSS.Tools.RedisCache\OSS.Tools.RedisCache.csproj" />
     <ProjectReference Include="..\..\Config\OSS.Tools.Config\OSS.Tools.Config.csproj" />
     <ProjectReference Include="..\..\Config\OSS.Tools.DirConfig\OSS.Tools.DirConfig.csproj" />
-    <ProjectReference Include="..\..\Data\OSS.Tools.DataStack.csproj" />
+    <ProjectReference Include="..\..\Data\OSS.Tools.DataFlow\OSS.Tools.DataFlow.csproj" />
     <ProjectReference Include="..\..\Log\OSS.Tools.Log\OSS.Tools.Log.csproj" />
   </ItemGroup>
 

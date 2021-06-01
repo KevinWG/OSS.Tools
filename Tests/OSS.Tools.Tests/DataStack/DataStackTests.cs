@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
-using OSS.Tools.DataStack;
 
 using System.Threading.Tasks;
+using OSS.Tools.DataFlow;
 
 namespace OSS.Tools.Tests.DataStack
 {
@@ -11,19 +11,19 @@ namespace OSS.Tools.Tests.DataStack
         public void Setup()
         {
         }
-        private static readonly IStackPusher<MsgData> _pusher = DataStackFactory.CreateStack(new MsgPoper());
+        private static readonly IDataPublisher<MsgData> _pusher = DataFlowFactory.CreateFlow(new MsgPoper());
 
         [Test]
         public async Task DataStackTest()
         {
-            var pushRes= await _pusher.Push(new MsgData() { name = "test" });
+            var pushRes = await _pusher.Publish(new MsgData() { name = "test" });
             Assert.True(pushRes);
 
             await Task.Delay(2000);
         }
 
 
-        private static readonly IStackPusher<MsgData> _fpusher = DataStackFactory.CreateStack<MsgData>(async (data)=>
+        private static readonly IDataPublisher<MsgData> _fpusher = DataFlowFactory.CreateFlow<MsgData>(async (data)=>
         {
             await Task.Delay(1000);
             Assert.True(data.name == "test");
@@ -33,7 +33,7 @@ namespace OSS.Tools.Tests.DataStack
         [Test]
         public async Task DataStackFuncTest()
         {
-            var pushRes = await _fpusher.Push(new MsgData() { name = "test" });
+            var pushRes = await _fpusher.Publish(new MsgData() { name = "test" });
             Assert.True(pushRes);
             await Task.Delay(2000);
         }
@@ -46,9 +46,9 @@ namespace OSS.Tools.Tests.DataStack
     }
 
 
-    public class MsgPoper : IStackPoper<MsgData>
+    public class MsgPoper : IDataSubscriber<MsgData>
     {
-        public async Task<bool> Pop(MsgData data)
+        public async Task<bool> Subscribe(MsgData data)
         {
             await Task.Delay(1000);
             Assert.True(data.name == "test");

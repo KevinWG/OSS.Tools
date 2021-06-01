@@ -2,18 +2,18 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>0.1.1</Version>
-    <Description>数据异步堆栈处理</Description>
-    <PackageReleaseNotes>数据的异步堆栈缓冲处理</PackageReleaseNotes>
+    <Version>0.1</Version>
+    <Description>数据异步流处理</Description>
+    <PackageReleaseNotes>数据的异步流缓冲处理</PackageReleaseNotes>
     <PackageIcon>logo.png</PackageIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>./bin/OSS.Tools.DataStack.xml</DocumentationFile>
+    <DocumentationFile>./bin/OSS.Tools.DataFlow.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>.\bin\OSS.Tools.DataStack.xml</DocumentationFile>
+    <DocumentationFile>.\bin\OSS.Tools.DataFlow.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
