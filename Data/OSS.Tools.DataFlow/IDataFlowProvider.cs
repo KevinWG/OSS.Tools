@@ -2,7 +2,7 @@
 namespace OSS.Tools.DataFlow
 {
     /// <summary>
-    ///  数据流提供者
+    ///  数据流提供器
     /// </summary>
     public interface IDataFlowProvider
     {
@@ -15,5 +15,37 @@ namespace OSS.Tools.DataFlow
         /// <param name="sourceName"></param>
         /// <returns> 返回当前流的发布接口实现 </returns>
         IDataPublisher<TData> CreateFlow<TData>(IDataSubscriber<TData> subscriber, string flowKey, string sourceName = "default");
+    }
+
+
+    /// <summary>
+    ///  数据流发布者的提供器
+    /// </summary>
+    public interface IDataFlowPublisherProvider
+    {
+        /// <summary>
+        /// 创建单向数据发布者
+        /// </summary>
+        /// <typeparam name="TData"></typeparam>
+        /// <param name="flowKey"> 流key  </param>
+        /// <param name="sourceName"></param>
+        /// <returns> 返回当前流的发布接口实现 </returns>
+        IDataPublisher<TData> CreatePublisher<TData>(string flowKey, string sourceName = "default");
+    }
+    
+    /// <summary>
+    ///  数据流订阅者的接收器
+    /// </summary>
+    public interface IDataFlowSubscriberReceiver
+    {
+        /// <summary>
+        /// 接收数据订阅者
+        /// </summary>
+        /// <typeparam name="TData"></typeparam>
+        /// <param name="subscriber"></param>
+        /// <param name="flowKey"> 流key  </param>
+        /// <param name="sourceName"></param>
+        /// <returns> 是否接收成功 </returns>
+        bool Receive<TData>(IDataSubscriber<TData> subscriber, string flowKey, string sourceName = "default");
     }
 }

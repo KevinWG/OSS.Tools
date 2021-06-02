@@ -7,7 +7,7 @@ namespace OSS.Tools.DataFlow
     ///  数据的订阅者
     /// </summary>
     /// <typeparam name="TData"></typeparam>
-    public interface IDataSubscriber<TData>
+    public interface IDataSubscriber<in TData>
     {
         /// <summary>
         /// 弹出数据
@@ -23,11 +23,7 @@ namespace OSS.Tools.DataFlow
 
         internal InterDataSubscriber(Func<TData, Task<bool>> subscribeFunc)
         {
-            if (subscribeFunc == null)
-            {
-                throw new ArgumentNullException("Func<TData, Task<bool>> poper 方法不能为空！");
-            }
-            _subscriber = subscribeFunc;
+            _subscriber = subscribeFunc ?? throw new ArgumentNullException(nameof(subscribeFunc),"订阅者方法不能为空！");
         }
 
         public Task<bool> Subscribe(TData data)
