@@ -6,7 +6,7 @@ namespace OSS.Tools.DataFlow
     ///  数据的发布者
     /// </summary>
     /// <typeparam name="TData"></typeparam>
-    public interface IDataPublisher<TData>
+    public interface IDataPublisher<in TData>
     {
         /// <summary>
         /// 推进数据
