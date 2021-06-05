@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using OSS.Tools.DataFlow.Inter;
 
 namespace OSS.Tools.DataFlow
 {
@@ -9,6 +10,7 @@ namespace OSS.Tools.DataFlow
     public class DefaultDataFlow<TData> : IDataPublisher<TData>
     {
         private IDataSubscriber<TData> _subscriber;
+
         /// <summary>
         ///  构造函数
         /// </summary>
@@ -26,7 +28,7 @@ namespace OSS.Tools.DataFlow
         public Task<bool> Publish(TData data)
         {
             Task.Factory.StartNew((obj) => { _subscriber?.Subscribe((TData) obj); }, data);
-            return Task.FromResult(true);
+            return InterUtils.TrueTask;
         }
     }
 }
