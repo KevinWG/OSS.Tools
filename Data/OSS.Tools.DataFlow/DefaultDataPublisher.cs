@@ -7,17 +7,20 @@ namespace OSS.Tools.DataFlow
     ///  默认数据流
     /// </summary>
     /// <typeparam name="TData"></typeparam>
-    public class DefaultDataFlow<TData> : IDataPublisher<TData>
+    public class DefaultDataPublisher<TData> : IDataPublisher<TData>
     {
-        private IDataSubscriber<TData> _subscriber;
+        private readonly string              _msgKey;
+        private readonly DataPublisherOption _option;
 
         /// <summary>
         ///  构造函数
         /// </summary>
-        /// <param name="subscriber"></param>
-        public DefaultDataFlow(IDataSubscriber<TData> subscriber)
+        /// <param name="msgFlowKey"></param>
+        /// <param name="option"></param>
+        public DefaultDataPublisher(string msgFlowKey,DataPublisherOption option)
         {
-            _subscriber = subscriber;
+            _msgKey = msgFlowKey;
+            _option = option;
         }
 
         /// <summary>
@@ -27,8 +30,7 @@ namespace OSS.Tools.DataFlow
         /// <returns></returns>
         public Task<bool> Publish(TData data)
         {
-            Task.Factory.StartNew((obj) => { _subscriber?.Subscribe((TData) obj); }, data);
-            return InterUtils.TrueTask;
+            return InterQueueHub.Publish(_msgKey, data, _option?.SourceName);
         }
     }
 }
