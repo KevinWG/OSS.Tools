@@ -65,7 +65,7 @@ namespace OSS.Tools.Cache
         public static Task<bool> SetAsync<T>(string key, T obj, TimeSpan slidingExpiration,
             string sourceName = "default")
         {
-            return SetAsync(key, obj, slidingExpiration, null, sourceName);
+            return SetAsync(key, obj,new CacheTimeOptions(){sliding_expiration = slidingExpiration },  sourceName);
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace OSS.Tools.Cache
         /// <returns>是否添加成功</returns>
         public static Task<bool> SetAbsoluteAsync<T>(string key, T obj, TimeSpan absoluteExpiration,string sourceName = "default")
         {
-            return SetAsync(key, obj, null, absoluteExpiration, sourceName);
+            return SetAsync(key, obj, new CacheTimeOptions(){absolute_expiration_relative_to_now = absoluteExpiration}, sourceName);
         }
 
         /// <summary>
@@ -88,18 +88,13 @@ namespace OSS.Tools.Cache
         /// <typeparam name="T"></typeparam>
         /// <param name="key">添加对象的key</param>
         /// <param name="obj">值</param>
-        /// <param name="slidingExpiration">滚动过期时长，访问后自动延长，如果同时设置固定过期，则只能在固定时长范围内延长</param>
-        /// <param name="maxAbsoluteExpiration">固定过期时长，设置后到时过期</param>
+        /// <param name="opt">缓存过期时间选项</param>
         /// <param name="sourceName"></param>
         /// <returns></returns>
-        public static Task<bool> SetAsync<T>(string key, T obj,
-            TimeSpan? slidingExpiration, TimeSpan? absoluteExpiration, string sourceName = "default")
+        public static Task<bool> SetAsync<T>(string key, T obj, CacheTimeOptions opt
+            , string sourceName = "default")
         {
-            return GetCache(sourceName).SetAsync(key, obj, new CacheTimeOptions()
-            {
-                AbsoluteExpirationRelativeToNow = absoluteExpiration,
-                SlidingExpiration               = slidingExpiration
-            });
+            return GetCache(sourceName).SetAsync(key, obj, opt);
         }
 
         #endregion
@@ -130,7 +125,8 @@ namespace OSS.Tools.Cache
         public static Task<RType> GetOrSetAsync<RType>(string cacheKey, Func<Task<RType>> getFunc,
             TimeSpan slidingExpiration, string sourceName = "default")
         {
-            return GetOrSetAsync(cacheKey, getFunc, slidingExpiration, null,  sourceName);
+            return GetOrSetAsync(cacheKey, getFunc, new CacheTimeOptions() { sliding_expiration = slidingExpiration }
+            , sourceName);
         }
 
         /// <summary>
@@ -145,7 +141,10 @@ namespace OSS.Tools.Cache
         public static Task<RType> GetOrSetAbsoluteAsync<RType>(string cacheKey, Func<Task<RType>> getFunc,
             TimeSpan absoluteExpiration, string sourceName = "default")
         {
-            return GetOrSetAsync(cacheKey, getFunc, null, absoluteExpiration,  sourceName);
+            return GetOrSetAsync(cacheKey, getFunc, new CacheTimeOptions()
+            {
+                absolute_expiration_relative_to_now = absoluteExpiration
+            } ,  sourceName);
         }
 
         /// <summary>
@@ -154,12 +153,11 @@ namespace OSS.Tools.Cache
         /// <typeparam name="RType"></typeparam>
         /// <param name="cacheKey"></param>
         /// <param name="createFunc">没有数据时，通过此方法获取原始数据</param>
-        /// <param name="slidingExpiration">滚动过期时长，访问后自动延长，如果同时设置固定过期，则只能在固定时长范围内延长</param>
-        /// <param name="absoluteExpiration">固定过期时长，设置后到时过期</param>
+        /// <param name="opt"></param>
         /// <param name="sourceName">来源名称</param>
         /// <returns></returns>
         public static async Task<RType> GetOrSetAsync<RType>(string cacheKey, Func<Task<RType>> createFunc
-            , TimeSpan? slidingExpiration, TimeSpan? absoluteExpiration, string sourceName = "default")
+            , CacheTimeOptions opt, string sourceName = "default")
         {
             var obj = await GetAsync<RType>(cacheKey, sourceName);
             if (obj != null && !obj.Equals(default(RType)))
@@ -172,7 +170,7 @@ namespace OSS.Tools.Cache
             if (data == null || data.Equals(default(RType)))
                 return data;
 
-            await SetAsync(cacheKey, data, slidingExpiration, absoluteExpiration, sourceName);
+            await SetAsync(cacheKey, data, opt, sourceName);
             return data;
         }
 
@@ -195,7 +193,7 @@ namespace OSS.Tools.Cache
             Func<RType, bool> failProtectCondition, int protectSeconds = 10, 
             string sourceName = "default")
         {
-            return GetOrSetAsync(cacheKey, getFunc, slidingExpiration, null, failProtectCondition, protectSeconds, sourceName);
+            return GetOrSetAsync(cacheKey, getFunc,new CacheTimeOptions(){sliding_expiration = slidingExpiration}, failProtectCondition, protectSeconds, sourceName);
         }
 
         /// <summary>
@@ -213,7 +211,7 @@ namespace OSS.Tools.Cache
             Func<RType, bool> failProtectCondition, int protectSeconds = 10,
             string sourceName = "default")
         {
-            return GetOrSetAsync(cacheKey, getFunc, null, absoluteExpiration, failProtectCondition, protectSeconds, sourceName);
+            return GetOrSetAsync(cacheKey, getFunc, new CacheTimeOptions(){absolute_expiration_relative_to_now = absoluteExpiration}, failProtectCondition, protectSeconds, sourceName);
         }
 
         /// <summary>
@@ -222,14 +220,13 @@ namespace OSS.Tools.Cache
         /// <typeparam name="RType"></typeparam>
         /// <param name="cacheKey"></param>
         /// <param name="getFunc">没有数据时，通过此方法获取原始数据</param>
-        /// <param name="slidingExpiration">滚动过期时长，访问后自动延长，如果同时设置固定过期，则只能在固定时长范围内延长</param>
-        /// <param name="absoluteExpiration">固定过期时长，设置后到时过期</param>
+        /// <param name="cacheTimeOpt">滚动过期时长，访问后自动延长，如果同时设置固定过期，则只能在固定时长范围内延长</param>
         /// <param name="hitProtectCondition">缓存击穿保护触发条件</param>
         /// <param name="hitProtectSeconds">缓存击穿保护秒数</param>
         /// <param name="sourceName">来源名称</param>
         /// <returns></returns>
         public static async Task<RType> GetOrSetAsync<RType>(string cacheKey, Func<Task<RType>> getFunc
-            , TimeSpan? slidingExpiration, TimeSpan? absoluteExpiration,
+            , CacheTimeOptions cacheTimeOpt,
             Func<RType, bool> hitProtectCondition, int hitProtectSeconds, string sourceName= "default")
         {
             if (getFunc == null)
@@ -244,12 +241,14 @@ namespace OSS.Tools.Cache
             var hitTrigger = hitProtectCondition?.Invoke(data) ?? data == null;
             if (hitTrigger)
             {
-                absoluteExpiration = TimeSpan.FromSeconds(hitProtectSeconds);
-                slidingExpiration  = null;
+                cacheTimeOpt = new CacheTimeOptions()
+                {
+                    absolute_expiration_relative_to_now = TimeSpan.FromSeconds(hitProtectSeconds)
+                };
             }
 
             var cacheData = new ProtectCacheData<RType>(data);
-            await SetAsync(cacheKey, cacheData, slidingExpiration, absoluteExpiration, sourceName);
+            await SetAsync(cacheKey, cacheData, cacheTimeOpt, sourceName);
 
             return data;
         }

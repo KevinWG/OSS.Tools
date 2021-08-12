@@ -34,16 +34,10 @@ namespace OSS.Tools.Cache
         /// <returns>是否添加成功</returns>
         public Task<bool> SetAsync<T>(string key, T obj, CacheTimeOptions cacheOpt)
         {
-            if (!cacheOpt.AbsoluteExpirationRelativeToNow.HasValue && !cacheOpt.SlidingExpiration.HasValue)
+            if (!cacheOpt.sliding_expiration.HasValue && !cacheOpt.absolute_expiration.HasValue&&!cacheOpt.absolute_expiration_relative_to_now.HasValue)
                 throw new ArgumentNullException("cacheOpt", "缓存过期时间不正确,需要设置固定过期时间或者相对过期时间");
-
-            var opt = new MemoryCacheEntryOptions
-            {
-                AbsoluteExpirationRelativeToNow = cacheOpt.AbsoluteExpirationRelativeToNow,
-                SlidingExpiration               = cacheOpt.SlidingExpiration
-            };
-
-            _cache.Set(key, obj, opt);
+            
+            _cache.Set(key, obj, cacheOpt.ToMemCacheTimeOpt());
             return Task.FromResult(true);
         }
 
@@ -57,11 +51,11 @@ namespace OSS.Tools.Cache
         {
             return Task.FromResult(_cache.Get<T>(key));
         }
-        
+
         /// <summary>
         /// 移除缓存对象
         /// </summary>
-        /// <param name="key"></param>
+        /// <param name="keys"></param>
         /// <returns>是否成功</returns>
         public Task<bool> RemoveAsync(params string[] keys)
         {
