@@ -13,7 +13,7 @@
 using System;
 using System.IO;
 
-namespace OSS.Tools.Http.Mos
+namespace OSS.Tools.Http
 {
     public struct FileParameter
     {

@@ -17,7 +17,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace OSS.Tools.Http
+namespace OSS.Tools.Http.Mos.Extention
 {
     /// <summary>
     ///  请求基类
@@ -25,24 +25,55 @@ namespace OSS.Tools.Http
     public static class HttpClientExtention
     {
         private const string _lineBreak = "\r\n";
-
         /// <summary>
         ///   编码格式
         /// </summary>
         public static Encoding Encoding { get; set; } = Encoding.UTF8;
 
+        //private static readonly Dictionary<string,Action<HttpContentHeaders,string>> _notCanAddContentHeaderDics
+        //    =new Dictionary<string, Action<HttpContentHeaders, string>>();
 
         #region   扩展方法
-        
+
+
+        /// <summary>
+        /// 发送Post请求
+        /// </summary>
+        /// <param name="request">请求的参数</param>
+        /// <param name="client"></param>
+        /// <returns>自定义的Response结果</returns>
+        public static Task<HttpResponseMessage> PostAsync(this HttpClient client, OssHttpRequest request)
+        {
+            request.HttpMethod = HttpMethod.Post;
+
+            return RestSend(client, request);
+        }
+
+        /// <summary>
+        /// 发送Get请求
+        /// </summary>
+        /// <param name="request">请求的参数</param>
+        /// <param name="client"></param>
+        /// <returns>自定义的Response结果</returns>
+        public static Task<HttpResponseMessage> GetAsync(this HttpClient client, OssHttpRequest request)
+        {
+            request.HttpMethod = HttpMethod.Get;
+
+            return RestSend(client,request);
+        }
+
+
+
+
         /// <summary>
         ///  执行请求方法
         /// </summary>
         /// <param name="client"></param>
         /// <param name="request"></param>
         /// <returns></returns>
-        public static Task<HttpResponseMessage> SendAsync(this HttpClient client, OssHttpRequest request)
+        public static Task<HttpResponseMessage> RestSend(this HttpClient client, OssHttpRequest request)
         {
-            return SendAsync(client, request, HttpCompletionOption.ResponseContentRead, CancellationToken.None);
+            return RestSend(client, request, HttpCompletionOption.ResponseContentRead, CancellationToken.None);
         }
         
         /// <summary>
@@ -55,7 +86,7 @@ namespace OSS.Tools.Http
         public static Task<HttpResponseMessage> RestSend(this HttpClient client, OssHttpRequest request,
             HttpCompletionOption completionOption)
         {
-           return SendAsync(client, request, completionOption, CancellationToken.None);
+           return  RestSend(client, request, completionOption, CancellationToken.None);
         }
         
         /// <summary>
@@ -66,13 +97,13 @@ namespace OSS.Tools.Http
         /// <param name="completionOption"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public static Task<HttpResponseMessage> SendAsync(this HttpClient client, OssHttpRequest request,
+        public static Task<HttpResponseMessage> RestSend(this HttpClient client, OssHttpRequest request,
             HttpCompletionOption completionOption ,
             CancellationToken cancellationToken)
         {
             var reqMsg = new HttpRequestMessage
             {
-                RequestUri = new Uri(request.AddressUrl),
+                RequestUri = string.IsNullOrEmpty(request.AddressUrl) ? request.Uri : new Uri(request.AddressUrl),
                 Method     = request.HttpMethod
             };
 
@@ -86,6 +117,8 @@ namespace OSS.Tools.Http
         #region  配置 ReqMsg信息
 
     
+        
+
         /// <summary>
         ///  配置使用的content
         /// </summary>

@@ -17,7 +17,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace OSS.Tools.Http
+namespace OSS.Tools.Http.Mos.Extention
 {
     /// <summary>
     /// http请求辅助类
@@ -32,9 +32,9 @@ namespace OSS.Tools.Http
         /// <param name="request">请求的参数</param>
         /// <param name="sourceName"></param>
         /// <returns>自定义的Response结果</returns>
-        public static Task<HttpResponseMessage> SendAsync(this OssHttpRequest request, string sourceName=null)
+        public static Task<HttpResponseMessage> RestSend(this OssHttpRequest request, string sourceName=null)
         {
-            return SendAsync(request, HttpCompletionOption.ResponseContentRead, CancellationToken.None, sourceName);
+            return RestSend(request, HttpCompletionOption.ResponseContentRead, CancellationToken.None, sourceName);
         }
 
         /// <summary>
@@ -44,10 +44,10 @@ namespace OSS.Tools.Http
         /// <param name="completionOption"></param>
         /// <param name="sourceName"></param>
         /// <returns>自定义的Response结果</returns>
-        public static Task<HttpResponseMessage> SendAsync(this OssHttpRequest request,
+        public static Task<HttpResponseMessage> RestSend(this OssHttpRequest request,
             HttpCompletionOption completionOption, string sourceName=null)
         {
-            return SendAsync(request, completionOption, CancellationToken.None, sourceName);
+            return RestSend(request, completionOption, CancellationToken.None, sourceName);
         }
 
         /// <summary>
@@ -58,10 +58,10 @@ namespace OSS.Tools.Http
         /// <param name="token"></param>
         /// <param name="sourceName"></param>
         /// <returns>自定义的Response结果</returns>
-        public static Task<HttpResponseMessage> SendAsync(this OssHttpRequest request, HttpCompletionOption completionOption,
+        public static Task<HttpResponseMessage> RestSend(this OssHttpRequest request, HttpCompletionOption completionOption,
             CancellationToken token, string sourceName=null)
         {
-            return HttpClientHelper.CreateClient(sourceName).SendAsync(request, completionOption, token);
+            return HttpClientHelper.CreateClient(sourceName).RestSend(request, completionOption, token);
         }
 
         #endregion
