@@ -20,7 +20,13 @@ using System.Threading.Tasks;
 //老版本命名空间兼容
 namespace OSS.Tools.Http.Extention
 {
+    public static class OldExtention
+    {
+        public static void No()
+        {
 
+        }
+    }
 }
 
 namespace OSS.Tools.Http.Mos
