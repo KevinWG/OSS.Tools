@@ -142,15 +142,15 @@ namespace OSS.Tools.Http
         /// <param name="boundary"></param>
         private static void WriteMultipartFormData(Stream memory, OssHttpRequest request, string boundary)
         {
-            if (request.FormParameters!=null)
+            if (request.form_paras!=null)
             {
-                foreach (var param in request.FormParameters)
+                foreach (var param in request.form_paras)
                 {
                     WriteStringTo(memory, GetMultipartFormData(param, boundary));
                 }
             }
             
-            foreach (var file in request.FileParameters)
+            foreach (var file in request.file_paras)
             {
                 //文件头
                 WriteStringTo(memory, GetMultipartFileHeader(file, boundary));
@@ -208,9 +208,9 @@ namespace OSS.Tools.Http
         {
             var formstring = new StringBuilder();
 
-            if (request.FormParameters!=null)
+            if (request.form_paras!=null)
             {
-                foreach (var p in request.FormParameters)
+                foreach (var p in request.form_paras)
                 {
                     if (formstring.Length > 1)
                         formstring.Append("&");

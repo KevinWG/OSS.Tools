@@ -69,13 +69,13 @@ namespace OSS.Tools.Http
         /// <summary>
         /// 文件参数列表
         /// </summary>
-        public IReadOnlyList<FileParameter> FileParameters => _fileParameters ;
+        public IReadOnlyList<FileParameter> file_paras => _fileParameters ;
         
         /// <summary>
         ///  添加文件
         /// </summary>
         /// <param name="file"></param>
-        public void AddFile(FileParameter file)
+        public void AddFilePara(FileParameter file)
         {
             if (_fileParameters==null)
             {
@@ -88,7 +88,7 @@ namespace OSS.Tools.Http
         /// <summary>
         /// 非文件参数列表
         /// </summary>
-        public IReadOnlyList<FormParameter> FormParameters => _formParameters ;// 兼容老版本，取值时默认赋值
+        public IReadOnlyList<FormParameter> form_paras => _formParameters ;// 兼容老版本，取值时默认赋值
 
         /// <summary>
         ///  添加表单参数
