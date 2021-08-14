@@ -17,7 +17,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace OSS.Tools.Http.Mos.Extention
+namespace OSS.Tools.Http.Mos
 {
     /// <summary>
     /// http请求辅助类
