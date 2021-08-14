@@ -13,11 +13,9 @@
 using System;
 using System.IO;
 
-namespace OSS.Tools.Http
+namespace OSS.Tools.Http.Mos
 {
-    /// <summary>
-    ///  文件参数
-    /// </summary>
+    [Obsolete("转移至OSS.Tools.Http 命名空间下")]
     public struct FileParameter
     {
         /// <summary>

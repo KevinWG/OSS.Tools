@@ -10,11 +10,14 @@
 
 #endregion
 
-namespace OSS.Tools.Http
+using System;
+
+namespace OSS.Tools.Http.Mos
 {
     /// <summary>
-    /// 表单参数
+    /// 
     /// </summary>
+    [Obsolete("转移至OSS.Tools.Http 命名空间下")]
     public struct FormParameter
     {
         /// <summary>
