@@ -46,13 +46,14 @@ namespace OSS.Tools.RedisCache
         /// <returns></returns>
         public async Task<bool> SetAsync<T>(string key, T obj, CacheTimeOptions cacheOpt)
         {
-            var text = JsonConvert.SerializeObject(obj);
+            var text  = JsonConvert.SerializeObject(obj);
             var bytes = Encoding.UTF8.GetBytes(text);
 
             await _cache.SetAsync(key, bytes, new DistributedCacheEntryOptions()
             {
-                AbsoluteExpirationRelativeToNow = cacheOpt.AbsoluteExpirationRelativeToNow,
-                SlidingExpiration               = cacheOpt.SlidingExpiration
+                AbsoluteExpirationRelativeToNow = cacheOpt.absolute_expiration_relative_to_now,
+                SlidingExpiration               = cacheOpt.sliding_expiration,
+                AbsoluteExpiration              = cacheOpt.absolute_expiration
             });
             return true;
         }
