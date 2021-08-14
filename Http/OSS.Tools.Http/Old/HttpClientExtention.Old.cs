@@ -17,7 +17,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace OSS.Tools.Http.Mos.Extention
+//老版本命名空间兼容
+namespace OSS.Tools.Http.Extention
+{
+
+}
+
+namespace OSS.Tools.Http.Mos
 {
     /// <summary>
     ///  请求基类
