@@ -52,7 +52,7 @@ namespace OSS.Tools.Http
         /// <param name="request"></param>
         /// <param name="completionOption"></param>
         /// <returns></returns>
-        public static Task<HttpResponseMessage> RestSend(this HttpClient client, OssHttpRequest request,
+        public static Task<HttpResponseMessage> SendAsync(this HttpClient client, OssHttpRequest request,
             HttpCompletionOption completionOption)
         {
            return SendAsync(client, request, completionOption, CancellationToken.None);
@@ -72,11 +72,11 @@ namespace OSS.Tools.Http
         {
             var reqMsg = new HttpRequestMessage
             {
-                RequestUri = new Uri(request.AddressUrl),
-                Method     = request.HttpMethod
+                RequestUri = new Uri(request.address_url),
+                Method     = request.http_method
             };
 
-            ConfigReqContent(reqMsg, request); //  配置内容
+            PackageReqContent(reqMsg, request); //  配置内容
             return client.SendAsync(reqMsg, completionOption, cancellationToken);
         }
 
@@ -92,24 +92,26 @@ namespace OSS.Tools.Http
         /// <param name="reqMsg"></param>
         /// <param name="req"></param>
         /// <returns></returns>
-        private static void ConfigReqContent(HttpRequestMessage reqMsg, OssHttpRequest req)
+        private static void PackageReqContent(HttpRequestMessage reqMsg, OssHttpRequest req)
         {
-            if (req.HttpMethod == HttpMethod.Get)
+            req.PrepareSend();
+
+            if (req.http_method == HttpMethod.Get)
             {
                 req.RequestSet?.Invoke(reqMsg);
                 return;
             }
 
-            if (req.HasFile)
+            if (req.has_file)
             {
                 var boundary =GetBoundary();
-
+                
                 var memory=new MemoryStream();
                 WriteMultipartFormData(memory, req, boundary);
                 memory.Seek(0, SeekOrigin.Begin);//设置指针到起点
-                
+
                 reqMsg.Content = new StreamContent(memory);
-                req.RequestSet?.Invoke(reqMsg);  
+                req.RequestSet?.Invoke(reqMsg);
 
                 reqMsg.Content.Headers.Remove("Content-Type");
                 reqMsg.Content.Headers.TryAddWithoutValidation("Content-Type", $"multipart/form-data;boundary={boundary}");
@@ -216,11 +218,11 @@ namespace OSS.Tools.Http
                 }
             }
          
-            if (string.IsNullOrEmpty(request.CustomBody)) return formstring.ToString();
+            if (string.IsNullOrEmpty(request.custom_body)) return formstring.ToString();
 
             if (formstring.Length > 1)
                 formstring.Append("&");
-            formstring.Append(request.CustomBody);
+            formstring.Append(request.custom_body);
             return formstring.ToString();
         }
         #endregion

@@ -12,6 +12,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 
 namespace OSS.Tools.Http
@@ -21,25 +22,23 @@ namespace OSS.Tools.Http
     /// </summary>
     public class OssHttpRequest
     {
-        
+        /// <summary>
+        ///  请求构造函数
+        /// </summary>
         public OssHttpRequest()
         {
         }
 
-        public OssHttpRequest(string reqUrl)
-        {
-            AddressUrl = reqUrl;
-        }
-        
-        /// <summary>
-        ///  如果此值设置，则忽略 Uri 值
-        /// </summary>
-        public string AddressUrl { get; set; }
 
         /// <summary>
-        /// 请求方式
+        /// 请求构造函数
         /// </summary>
-        public HttpMethod HttpMethod { get; set; } = HttpMethod.Get;
+        /// <param name="reqUrl">请求地址</param>
+        public OssHttpRequest(string reqUrl)
+        {
+            address_url = reqUrl;
+        }
+
 
         /// <summary>
         ///   reqMessage 设置方法
@@ -47,15 +46,26 @@ namespace OSS.Tools.Http
         /// </summary>
         public Action<HttpRequestMessage> RequestSet { get; set; }
 
+        /// <summary>
+        ///  如果此值设置，则忽略 Uri 值
+        /// </summary>
+        public string address_url { get; set; }
+
+        /// <summary>
+        /// 请求方式
+        /// </summary>
+        public HttpMethod http_method { get; set; } = HttpMethod.Get;
+
+  
+
         #region   请求的内容参数
 
         /// <summary>
         /// 是否存在文件
         /// </summary>
-        public bool HasFile => _fileParameters != null && _fileParameters.Count > 0;
+        public bool has_file => _fileParameters != null && _fileParameters.Any();
 
         private List<FileParameter> _fileParameters;
-
         /// <summary>
         /// 文件参数列表
         /// </summary>
@@ -74,25 +84,24 @@ namespace OSS.Tools.Http
             _fileParameters.Add(file);
         }
         
-
-
         private List<FormParameter> _formParameters;
         /// <summary>
         /// 非文件参数列表
         /// </summary>
         public IReadOnlyList<FormParameter> FormParameters => _formParameters ;// 兼容老版本，取值时默认赋值
-        
+
         /// <summary>
         ///  添加表单参数
         /// </summary>
-        /// <param name="formPara"></param>
-        public void Add(FormParameter formPara)
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        public void AddFormPara(string name, object value)
         {
             if (_formParameters == null)
             {
                 _formParameters = new List<FormParameter>();
             }
-            _formParameters.Add(formPara);
+            _formParameters.Add(new FormParameter(name,value));
         }
 
         #endregion
@@ -101,6 +110,14 @@ namespace OSS.Tools.Http
         /// 自定义内容实体
         /// eg:当上传文件时，无法自定义内容
         /// </summary>
-        public string CustomBody { get; set; }
+        public string custom_body { get; set; }
+
+        /// <summary>
+        /// 发送前准备
+        /// </summary>
+        protected internal virtual void PrepareSend()
+        {
+
+        }
     }
 }
