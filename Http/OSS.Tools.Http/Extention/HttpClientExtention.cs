@@ -12,6 +12,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
@@ -102,7 +103,7 @@ namespace OSS.Tools.Http
                 return;
             }
 
-            if (req.has_file)
+            if (req.FileParameters!=null&& req.FileParameters.Any())
             {
                 var boundary =GetBoundary();
                 
@@ -119,8 +120,9 @@ namespace OSS.Tools.Http
             else
             {
                 var data = GetNormalFormData(req);
-               
-                reqMsg.Content = new StringContent(data);
+
+                // 默认表单提交，上层应用程序可以设置
+                reqMsg.Content = new StringContent(data,Encoding.UTF8, "application/x-www-form-urlencoded");
                 req.RequestSet?.Invoke(reqMsg);
             }
 
@@ -142,15 +144,15 @@ namespace OSS.Tools.Http
         /// <param name="boundary"></param>
         private static void WriteMultipartFormData(Stream memory, OssHttpRequest request, string boundary)
         {
-            if (request.form_paras!=null)
+            if (request.FormParameters!=null)
             {
-                foreach (var param in request.form_paras)
+                foreach (var param in request.FormParameters)
                 {
                     WriteStringTo(memory, GetMultipartFormData(param, boundary));
                 }
             }
             
-            foreach (var file in request.file_paras)
+            foreach (var file in request.FileParameters)
             {
                 //文件头
                 WriteStringTo(memory, GetMultipartFileHeader(file, boundary));
@@ -207,10 +209,9 @@ namespace OSS.Tools.Http
         private static string GetNormalFormData(OssHttpRequest request)
         {
             var formstring = new StringBuilder();
-
-            if (request.form_paras!=null)
+            if (request.FormParameters!=null)
             {
-                foreach (var p in request.form_paras)
+                foreach (var p in request.FormParameters)
                 {
                     if (formstring.Length > 1)
                         formstring.Append("&");
