@@ -67,7 +67,7 @@ namespace OSS.Tools.Http
         /// <param name="completionOption"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public static Task<HttpResponseMessage> SendAsync(this HttpClient client, OssHttpRequest request,
+        public static async Task<HttpResponseMessage> SendAsync(this HttpClient client, OssHttpRequest request,
             HttpCompletionOption completionOption ,
             CancellationToken cancellationToken)
         {
@@ -77,8 +77,10 @@ namespace OSS.Tools.Http
                 Method     = request.http_method
             };
 
+            await request.PrepareSend();
             PackageReqContent(reqMsg, request); //  配置内容
-            return client.SendAsync(reqMsg, completionOption, cancellationToken);
+
+            return await client.SendAsync(reqMsg, completionOption, cancellationToken);
         }
 
 
@@ -95,8 +97,6 @@ namespace OSS.Tools.Http
         /// <returns></returns>
         private static void PackageReqContent(HttpRequestMessage reqMsg, OssHttpRequest req)
         {
-            req.PrepareSend();
-
             if (req.http_method == HttpMethod.Get)
             {
                 req.RequestSet?.Invoke(reqMsg);

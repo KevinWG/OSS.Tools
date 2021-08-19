@@ -13,6 +13,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace OSS.Tools.Http
 {
@@ -62,8 +63,9 @@ namespace OSS.Tools.Http
         /// <summary>
         /// 发送前准备
         /// </summary>
-        protected internal virtual void PrepareSend()
+        protected internal virtual Task PrepareSend()
         {
+            return Task.CompletedTask;
         }
 
 
