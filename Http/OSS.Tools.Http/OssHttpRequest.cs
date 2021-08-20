@@ -63,7 +63,7 @@ namespace OSS.Tools.Http
         /// <summary>
         /// 发送前准备
         /// </summary>
-        protected void OnSending(HttpRequestMessage httpRequestMessage) //(HttpRequestMessage httpRequestMessage)
+        protected virtual void OnSending(HttpRequestMessage httpRequestMessage) //(HttpRequestMessage httpRequestMessage)
         {
         }
 
