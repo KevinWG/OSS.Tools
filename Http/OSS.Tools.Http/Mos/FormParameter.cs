@@ -15,17 +15,17 @@ namespace OSS.Tools.Http
     /// <summary>
     /// 表单参数
     /// </summary>
-    public struct FormParameter
+    public struct NameValuePair
     {
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
-        public FormParameter(string name, object value)
+        public NameValuePair(string name, object value)
         {
-            Name = name;
-            Value = value;
+            this.name = name;
+            this.value = value;
             //Type = type;
             //Domain = string.Empty;
         }
@@ -35,16 +35,12 @@ namespace OSS.Tools.Http
         /// <summary>
         /// 参数名称
         /// </summary>
-        public string Name;
+        public string name;
+
         /// <summary>
         /// 参数值
         /// </summary>
-        public object Value;
-
-        ///// <summary>
-        /////  cookie的域名   -- cookie 类型时需要
-        ///// </summary>
-        //public string Domain;
+        public object value;
 
         /// <summary>
         /// 重写ToString返回   name=value编码后的格式
@@ -52,7 +48,7 @@ namespace OSS.Tools.Http
         /// <returns>String</returns>
         public override string ToString()
         {
-            return $"{Name}={Value}";
+            return $"{name}={value}";
         }
     }
     

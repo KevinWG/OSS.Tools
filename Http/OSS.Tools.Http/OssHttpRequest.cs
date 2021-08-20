@@ -89,7 +89,7 @@ namespace OSS.Tools.Http
         #region   请求的内容参数
 
         internal List<FileParameter> FileParameters;
-        internal List<FormParameter> FormParameters;
+        internal List<NameValuePair> FormParameters;
 
         #endregion
     }
@@ -136,7 +136,7 @@ namespace OSS.Tools.Http
         /// <summary>
         /// 非文件参数列表
         /// </summary>
-        public IReadOnlyList<FormParameter> form_paras => FormParameters; // 兼容老版本，取值时默认赋值
+        public IReadOnlyList<NameValuePair> form_paras => FormParameters; // 兼容老版本，取值时默认赋值
 
         /// <summary>
         ///  添加表单参数
@@ -147,11 +147,14 @@ namespace OSS.Tools.Http
         {
             if (FormParameters == null)
             {
-                FormParameters = new List<FormParameter>();
+                FormParameters = new List<NameValuePair>();
             }
-            FormParameters.Add(new FormParameter(name, value));
+            FormParameters.Add(new NameValuePair(name, value));
             return this;
         }
 
     }
+
+
+
 }

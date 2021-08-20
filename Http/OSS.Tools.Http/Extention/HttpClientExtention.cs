@@ -183,10 +183,10 @@ namespace OSS.Tools.Http
         /// <param name="param"></param>
         /// <param name="boundary"></param>
         /// <returns></returns>
-        private static string GetMultipartFormData(FormParameter param, string boundary)
+        private static string GetMultipartFormData(NameValuePair param, string boundary)
         {
             return
-                $"--{boundary}{_lineBreak}Content-Disposition: form-data; name=\"{param.Name}\"{_lineBreak}{_lineBreak}{param.Value}{_lineBreak}";
+                $"--{boundary}{_lineBreak}Content-Disposition: form-data; name=\"{param.name}\"{_lineBreak}{_lineBreak}{param.value}{_lineBreak}";
         }
 
         /// <summary>
