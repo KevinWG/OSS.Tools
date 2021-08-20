@@ -30,7 +30,7 @@ namespace OSS.Tools.Http
         /// <summary>
         ///   编码格式
         /// </summary>
-        public static Encoding Encoding { get; set; } = Encoding.UTF8;
+        internal static Encoding Encoding { get; set; } = Encoding.UTF8;
 
 
         #region   扩展方法
@@ -76,9 +76,10 @@ namespace OSS.Tools.Http
                 RequestUri = new Uri(request.address_url),
                 Method     = request.http_method
             };
-
-            await request.PrepareSend();
+            
             PackageReqContent(reqMsg, request); //  配置内容
+
+            await request.InternalOnSendingAsync(reqMsg);
 
             return await client.SendAsync(reqMsg, completionOption, cancellationToken);
         }
@@ -99,7 +100,7 @@ namespace OSS.Tools.Http
         {
             if (req.http_method == HttpMethod.Get)
             {
-                req.RequestSet?.Invoke(reqMsg);
+                //req.RequestSet?.Invoke(reqMsg);
                 return;
             }
 
@@ -112,7 +113,7 @@ namespace OSS.Tools.Http
                 memory.Seek(0, SeekOrigin.Begin);//设置指针到起点
 
                 reqMsg.Content = new StreamContent(memory);
-                req.RequestSet?.Invoke(reqMsg);
+                //req.RequestSet?.Invoke(reqMsg);
 
                 reqMsg.Content.Headers.Remove("Content-Type");
                 reqMsg.Content.Headers.TryAddWithoutValidation("Content-Type", $"multipart/form-data;boundary={boundary}");
@@ -123,7 +124,7 @@ namespace OSS.Tools.Http
 
                 // 默认表单提交，上层应用程序可以设置
                 reqMsg.Content = new StringContent(data,Encoding.UTF8, "application/x-www-form-urlencoded");
-                req.RequestSet?.Invoke(reqMsg);
+                //req.RequestSet?.Invoke(reqMsg);
             }
 
           

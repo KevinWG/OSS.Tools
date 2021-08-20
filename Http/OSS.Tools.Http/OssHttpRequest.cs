@@ -10,7 +10,6 @@
 
 #endregion
 
-using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -38,11 +37,11 @@ namespace OSS.Tools.Http
             address_url = reqUrl;
         }
         
-        /// <summary>
-        ///   reqMessage 设置方法
-        ///    如果当前的设置不能满足需求，可以通过这里再次设置
-        /// </summary>
-        public Action<HttpRequestMessage> RequestSet { get; set; }
+        ///// <summary>
+        /////   reqMessage 设置方法
+        /////    如果当前的设置不能满足需求，可以通过这里再次设置
+        ///// </summary>
+        //public Action<HttpRequestMessage> RequestSet { get; set; }
 
         /// <summary>
         ///  如果此值设置
@@ -60,13 +59,31 @@ namespace OSS.Tools.Http
         /// </summary>
         public string custom_body { get; set; }
 
+
         /// <summary>
         /// 发送前准备
         /// </summary>
-        protected internal virtual Task PrepareSend()
+        protected void OnSending(HttpRequestMessage httpRequestMessage) //(HttpRequestMessage httpRequestMessage)
+        {
+        }
+
+        /// <summary>
+        /// 准备发送执行
+        /// </summary>
+        protected virtual Task OnSendingAsync(HttpRequestMessage httpRequestMessage)//(HttpRequestMessage httpRequestMessage)
         {
             return Task.CompletedTask;
         }
+        
+        /// <summary>
+        /// 准备发送执行
+        /// </summary>
+        internal virtual Task InternalOnSendingAsync(HttpRequestMessage httpRequestMessage)
+        {
+            OnSending(httpRequestMessage);
+            return OnSendingAsync(httpRequestMessage);
+        }
+
 
 
         #region   请求的内容参数
@@ -106,13 +123,14 @@ namespace OSS.Tools.Http
         ///  添加文件
         /// </summary>
         /// <param name="file"></param>
-        public void AddFilePara(FileParameter file)
+        public OssHttpFormRequest AddFilePara(FileParameter file)
         {
             if (FileParameters == null)
             {
                 FileParameters = new List<FileParameter>();
             }
             FileParameters.Add(file);
+            return this;
         }
         
         /// <summary>
@@ -125,13 +143,14 @@ namespace OSS.Tools.Http
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
-        public void AddFormPara(string name, object value)
+        public OssHttpFormRequest AddFormPara(string name, object value)
         {
             if (FormParameters == null)
             {
                 FormParameters = new List<FormParameter>();
             }
             FormParameters.Add(new FormParameter(name, value));
+            return this;
         }
 
     }
