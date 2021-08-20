@@ -76,10 +76,11 @@ namespace OSS.Tools.Http
                 RequestUri = new Uri(request.address_url),
                 Method     = request.http_method
             };
-            
-            PackageReqContent(reqMsg, request); //  配置内容
 
-            await request.InternalOnSendingAsync(reqMsg);
+            await request.InternalPrepareSendAsync();
+
+            PackageReqContent(reqMsg, request); //  配置内容
+            request.OnSending(reqMsg);
 
             return await client.SendAsync(reqMsg, completionOption, cancellationToken);
         }
@@ -100,7 +101,6 @@ namespace OSS.Tools.Http
         {
             if (req.http_method == HttpMethod.Get)
             {
-                //req.RequestSet?.Invoke(reqMsg);
                 return;
             }
 
@@ -126,8 +126,7 @@ namespace OSS.Tools.Http
                 reqMsg.Content = new StringContent(data,Encoding.UTF8, "application/x-www-form-urlencoded");
                 //req.RequestSet?.Invoke(reqMsg);
             }
-
-          
+      
         }
 
         #endregion

@@ -59,29 +59,40 @@ namespace OSS.Tools.Http
         /// </summary>
         public string custom_body { get; set; }
 
-
+     
         /// <summary>
-        /// 发送前准备
+        /// 准备发送执行
         /// </summary>
-        protected virtual void OnSending(HttpRequestMessage httpRequestMessage) //(HttpRequestMessage httpRequestMessage)
+        protected virtual void PrepareSend() //(HttpRequestMessage httpRequestMessage)
         {
         }
 
         /// <summary>
         /// 准备发送执行
         /// </summary>
-        protected virtual Task OnSendingAsync(HttpRequestMessage httpRequestMessage)//(HttpRequestMessage httpRequestMessage)
+        protected virtual Task PrepareSendAsync()//(HttpRequestMessage httpRequestMessage)
         {
             return Task.CompletedTask;
         }
         
+
+
+
         /// <summary>
         /// 准备发送执行
         /// </summary>
-        internal virtual Task InternalOnSendingAsync(HttpRequestMessage httpRequestMessage)
+        internal virtual Task InternalPrepareSendAsync()
         {
-            OnSending(httpRequestMessage);
-            return OnSendingAsync(httpRequestMessage);
+            PrepareSend();
+            return PrepareSendAsync();
+        }
+
+
+        /// <summary>
+        /// 发送执行
+        /// </summary>
+        protected internal virtual void OnSending(HttpRequestMessage httpRequestMessage) //(HttpRequestMessage httpRequestMessage)
+        {
         }
 
 
