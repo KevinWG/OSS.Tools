@@ -11,7 +11,6 @@ namespace OSS.Tools.Tests.CacheTests
         [SetUp]
         public void Setup()
         {
-
         }
 
         [Test]

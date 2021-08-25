@@ -89,9 +89,9 @@ namespace OSS.Tools.Log
         public object msg_body { get; set; }
 
         /// <summary>
-        /// 编号
+        ///  日志跟踪编号
         /// </summary>
-        public string log_id { get; set; }
+        public string trace_num { get; set; }
     }
 
 }
