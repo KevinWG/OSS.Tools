@@ -91,7 +91,7 @@ namespace OSS.Tools.Log
         /// <summary>
         ///  日志跟踪编号
         /// </summary>
-        public string trace_num { get; set; }
+        public string trace_no { get; set; }
     }
 
 }

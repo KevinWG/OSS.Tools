@@ -109,7 +109,7 @@ namespace OSS.Tools.Log
             {
                 // 写日志本身不能再出错误，这里做特殊处理
             }
-            return info.trace_num;
+            return info.trace_no;
         }
 
     }

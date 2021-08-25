@@ -72,7 +72,7 @@ namespace OSS.Tools.Log
                                 Encoding.UTF8))
                         {
                             sw.WriteLine("{0:T}    Code:{1}    Key:{2}   Detail:{3}\r\n", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                                info.trace_num, info.msg_key, info.msg_body);
+                                info.trace_no, info.msg_key, info.msg_body);
                         }
                     }
                 }
