@@ -30,11 +30,11 @@ namespace OSS.Tools.Http
         /// 发送请求
         /// </summary>
         /// <param name="request">请求的参数</param>
-        /// <param name="sourceName"></param>
+        /// <param name="clientSourceName">如果设置 HttpClientHelper.HttpClientFactory,会在 CreateClient 时传入</param>
         /// <returns>自定义的Response结果</returns>
-        public static Task<HttpResponseMessage> SendAsync(this OssHttpRequest request, string sourceName=null)
+        public static Task<HttpResponseMessage> SendAsync(this OssHttpRequest request, string clientSourceName=null)
         {
-            return SendAsync(request, HttpCompletionOption.ResponseContentRead, CancellationToken.None, sourceName);
+            return SendAsync(request, HttpCompletionOption.ResponseContentRead, CancellationToken.None, clientSourceName);
         }
 
         /// <summary>
@@ -42,12 +42,12 @@ namespace OSS.Tools.Http
         /// </summary>
         /// <param name="request">请求的参数</param>
         /// <param name="completionOption"></param>
-        /// <param name="sourceName"></param>
+        /// <param name="clientSourceName">如果设置 HttpClientHelper.HttpClientFactory,会在 CreateClient 时传入</param>
         /// <returns>自定义的Response结果</returns>
         public static Task<HttpResponseMessage> SendAsync(this OssHttpRequest request,
-            HttpCompletionOption completionOption, string sourceName=null)
+            HttpCompletionOption completionOption, string clientSourceName = null)
         {
-            return SendAsync(request, completionOption, CancellationToken.None, sourceName);
+            return SendAsync(request, completionOption, CancellationToken.None, clientSourceName);
         }
 
         /// <summary>
@@ -56,12 +56,12 @@ namespace OSS.Tools.Http
         /// <param name="request">请求的参数</param>
         /// <param name="completionOption"></param>
         /// <param name="token"></param>
-        /// <param name="sourceName"></param>
+        /// <param name="clientSourceName">如果设置 HttpClientHelper.HttpClientFactory,会在 CreateClient 时传入</param>
         /// <returns>自定义的Response结果</returns>
         public static Task<HttpResponseMessage> SendAsync(this OssHttpRequest request, HttpCompletionOption completionOption,
-            CancellationToken token, string sourceName=null)
+            CancellationToken token, string clientSourceName = null)
         {
-            return HttpClientHelper.CreateClient(sourceName).SendAsync(request, completionOption, token);
+            return HttpClientHelper.CreateClient(clientSourceName).SendAsync(request, completionOption, token);
         }
 
         #endregion

@@ -5,11 +5,11 @@
     <PackageProjectUrl>https://github.com/KevinWG/OSS.Tools</PackageProjectUrl>
     <RepositoryUrl>https://github.com/KevinWG/OSS.Tools</RepositoryUrl>
     <PackageIconUrl>http://img1.osscore.cn/static/oss_net.png</PackageIconUrl>
-    <PackageReleaseNotes>简化方法处理</PackageReleaseNotes>
+    <PackageReleaseNotes>优化参数名称及注释</PackageReleaseNotes>
     <Authors>OSSCore</Authors>
     <Company>OSSCore</Company>
     <Description>HTTP请求工具类库</Description>
-    <Version>2.3.3</Version>
+    <Version>2.3.4</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

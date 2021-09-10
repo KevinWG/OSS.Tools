@@ -71,6 +71,8 @@ namespace OSS.Tools.Http
             HttpCompletionOption completionOption,
             CancellationToken cancellationToken)
         {
+            request.PrepareSend();
+
             var reqMsg = new HttpRequestMessage
             {
                 RequestUri = new Uri(request.address_url),
@@ -97,12 +99,8 @@ namespace OSS.Tools.Http
         /// <returns></returns>
         private static void PackageReqContent(HttpRequestMessage reqMsg, OssHttpRequest req)
         {
-            req.PrepareSend();
-
             if (req.http_method == HttpMethod.Get)
-            {
                 return;
-            }
 
             if (req.FileParameters!=null&& req.FileParameters.Any())
             {

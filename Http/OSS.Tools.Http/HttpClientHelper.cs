@@ -21,7 +21,7 @@ namespace OSS.Tools.Http
         /// 返回 HttpClientFactory 创建的对象， 
         /// 如果 HttpClientFactory 未初始化，则在固定时间间隔（五分钟）返回固定的HttpClient
         /// </returns>
-        public static HttpClient CreateClient(string sourceName = null)
+        internal static HttpClient CreateClient(string sourceName = null)
         {
             if (HttpClientFactory != null)
             {
