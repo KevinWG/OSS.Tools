@@ -58,7 +58,7 @@ namespace OSS.Tools.Http
         {
            return SendAsync(client, request, completionOption, CancellationToken.None);
         }
-        
+
         /// <summary>
         ///  执行请求方法
         /// </summary>
@@ -68,7 +68,7 @@ namespace OSS.Tools.Http
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public static async Task<HttpResponseMessage> SendAsync(this HttpClient client, OssHttpRequest request,
-            HttpCompletionOption completionOption ,
+            HttpCompletionOption completionOption,
             CancellationToken cancellationToken)
         {
             var reqMsg = new HttpRequestMessage
@@ -76,9 +76,7 @@ namespace OSS.Tools.Http
                 RequestUri = new Uri(request.address_url),
                 Method     = request.http_method
             };
-
-            await request.InternalPrepareSendAsync();
-
+            
             PackageReqContent(reqMsg, request); //  配置内容
             request.OnSending(reqMsg);
 
@@ -99,6 +97,8 @@ namespace OSS.Tools.Http
         /// <returns></returns>
         private static void PackageReqContent(HttpRequestMessage reqMsg, OssHttpRequest req)
         {
+            req.PrepareSend();
+
             if (req.http_method == HttpMethod.Get)
             {
                 return;

@@ -58,34 +58,30 @@ namespace OSS.Tools.Http
         /// eg:当上传文件时，无法自定义内容
         /// </summary>
         public string custom_body { get; set; }
-
-     
-        /// <summary>
-        /// 准备发送执行
-        /// </summary>
-        protected virtual void PrepareSend() //(HttpRequestMessage httpRequestMessage)
-        {
-        }
-
-        /// <summary>
-        /// 准备发送执行
-        /// </summary>
-        protected virtual Task PrepareSendAsync()//(HttpRequestMessage httpRequestMessage)
-        {
-            return Task.CompletedTask;
-        }
         
-
-
-
         /// <summary>
         /// 准备发送执行
         /// </summary>
-        internal virtual Task InternalPrepareSendAsync()
+        protected internal virtual void PrepareSend() //(HttpRequestMessage httpRequestMessage)
         {
-            PrepareSend();
-            return PrepareSendAsync();
         }
+
+        ///// <summary>
+        ///// 准备发送执行
+        ///// </summary>
+        //protected virtual Task PrepareSendAsync()//(HttpRequestMessage httpRequestMessage)
+        //{
+        //    return Task.CompletedTask;
+        //}
+        
+        ///// <summary>
+        ///// 准备发送执行
+        ///// </summary>
+        //internal virtual Task InternalPrepareSendAsync()
+        //{
+        //    PrepareSend();
+        //    return PrepareSendAsync();
+        //}
 
 
         /// <summary>
