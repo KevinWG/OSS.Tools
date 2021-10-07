@@ -10,6 +10,7 @@
 
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 
@@ -36,12 +37,6 @@ namespace OSS.Tools.Http
             address_url = reqUrl;
         }
         
-        ///// <summary>
-        /////   reqMessage 设置方法
-        /////    如果当前的设置不能满足需求，可以通过这里再次设置
-        ///// </summary>
-        //public Action<HttpRequestMessage> RequestSet { get; set; }
-
         /// <summary>
         ///  如果此值设置
         /// </summary>
@@ -65,45 +60,63 @@ namespace OSS.Tools.Http
         {
         }
 
-        ///// <summary>
-        ///// 准备发送执行
-        ///// </summary>
-        //protected virtual Task PrepareSendAsync()//(HttpRequestMessage httpRequestMessage)
-        //{
-        //    return Task.CompletedTask;
-        //}
-        
-        ///// <summary>
-        ///// 准备发送执行
-        ///// </summary>
-        //internal virtual Task InternalPrepareSendAsync()
-        //{
-        //    PrepareSend();
-        //    return PrepareSendAsync();
-        //}
-
-
         /// <summary>
         /// 发送执行
         /// </summary>
         protected internal virtual void OnSending(HttpRequestMessage httpRequestMessage) //(HttpRequestMessage httpRequestMessage)
         {
         }
-
-
-
+        
         #region   请求的内容参数
 
         internal List<FileParameter> FileParameters;
         internal List<NameValuePair> FormParameters;
+        
+        /// <summary>
+        /// 文件参数列表
+        /// </summary>
+        public IReadOnlyList<FileParameter> file_paras => FileParameters;
 
+        /// <summary>
+        ///  添加文件
+        /// </summary>
+        /// <param name="file"></param>
+        public OssHttpRequest AddFilePara(FileParameter file)
+        {
+            if (FileParameters == null)
+            {
+                FileParameters = new List<FileParameter>();
+            }
+            FileParameters.Add(file);
+            return this;
+        }
+
+        /// <summary>
+        /// 非文件参数列表
+        /// </summary>
+        public IReadOnlyList<NameValuePair> form_paras => FormParameters; // 兼容老版本，取值时默认赋值
+
+        /// <summary>
+        ///  添加表单参数
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        public OssHttpRequest AddFormPara(string name, object value)
+        {
+            if (FormParameters == null)
+            {
+                FormParameters = new List<NameValuePair>();
+            }
+            FormParameters.Add(new NameValuePair(name, value));
+            return this;
+        }
         #endregion
     }
 
     /// <summary>
     ///  表单请求
     /// </summary>
-    public class OssHttpFormRequest : OssHttpRequest
+    [Obsolete]public class OssHttpFormRequest : OssHttpRequest
     {
         /// <summary>
         ///  请求构造函数
@@ -119,46 +132,6 @@ namespace OSS.Tools.Http
         public OssHttpFormRequest(string reqUrl):base(reqUrl)
         {
         }
-
-        /// <summary>
-        /// 文件参数列表
-        /// </summary>
-        public IReadOnlyList<FileParameter> file_paras => FileParameters;
-
-        /// <summary>
-        ///  添加文件
-        /// </summary>
-        /// <param name="file"></param>
-        public OssHttpFormRequest AddFilePara(FileParameter file)
-        {
-            if (FileParameters == null)
-            {
-                FileParameters = new List<FileParameter>();
-            }
-            FileParameters.Add(file);
-            return this;
-        }
-        
-        /// <summary>
-        /// 非文件参数列表
-        /// </summary>
-        public IReadOnlyList<NameValuePair> form_paras => FormParameters; // 兼容老版本，取值时默认赋值
-
-        /// <summary>
-        ///  添加表单参数
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
-        public OssHttpFormRequest AddFormPara(string name, object value)
-        {
-            if (FormParameters == null)
-            {
-                FormParameters = new List<NameValuePair>();
-            }
-            FormParameters.Add(new NameValuePair(name, value));
-            return this;
-        }
-
     }
 
 
