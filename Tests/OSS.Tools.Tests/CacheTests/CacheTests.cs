@@ -39,8 +39,7 @@ namespace OSS.Tools.Tests.CacheTests
         public async Task GetTest()
         {
             var r = await CacheHelper.GetOrSetAbsoluteAsync("test_userkey"
-                , () => { return Task.FromResult(2); }
-                , TimeSpan.FromHours(2));
+                , () => Task.FromResult(2), TimeSpan.FromHours(2));
 
             // CacheHelper
             Assert.IsTrue(r == 2);
