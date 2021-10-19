@@ -35,7 +35,7 @@ namespace OSS.Tools.Cache
         public Task<bool> SetAsync<T>(string key, T obj, CacheTimeOptions cacheOpt)
         {
             if (!cacheOpt.sliding_expiration.HasValue && !cacheOpt.absolute_expiration.HasValue&&!cacheOpt.absolute_expiration_relative_to_now.HasValue)
-                throw new ArgumentNullException("cacheOpt", "缓存过期时间不正确,需要设置固定过期时间或者相对过期时间");
+                throw new ArgumentNullException(nameof(cacheOpt), "缓存过期时间不正确,需要设置固定过期时间或者相对过期时间");
             
             _cache.Set(key, obj, cacheOpt.ToMemCacheTimeOpt());
             return Task.FromResult(true);
