@@ -13,7 +13,7 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath></OutputPath>
-    <DocumentationFile>\OSS.Tools.Log.xml</DocumentationFile>
+    <DocumentationFile>./bin/OSS.Tools.Log.xml</DocumentationFile>
   </PropertyGroup>
 
 </Project>

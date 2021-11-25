@@ -119,10 +119,11 @@ namespace OSS.Tools.Http
             else
             {
                 var data = GetNormalFormData(req);
-
-                // 默认表单提交，上层应用程序可以设置
-                reqMsg.Content = new StringContent(data,Encoding.UTF8, "application/x-www-form-urlencoded");
-                //req.RequestSet?.Invoke(reqMsg);
+                if (!string.IsNullOrEmpty(data))
+                {
+                    // 默认表单提交，上层应用程序可以设置
+                    reqMsg.Content = new StringContent(data, Encoding.UTF8, "application/x-www-form-urlencoded");
+                }
             }
       
         }
@@ -217,10 +218,12 @@ namespace OSS.Tools.Http
                 }
             }
          
-            if (string.IsNullOrEmpty(request.custom_body)) return formstring.ToString();
+            if (string.IsNullOrEmpty(request.custom_body))
+                return formstring.ToString();
 
             if (formstring.Length > 1)
                 formstring.Append("&");
+
             formstring.Append(request.custom_body);
             return formstring.ToString();
         }

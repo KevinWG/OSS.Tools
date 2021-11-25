@@ -16,9 +16,9 @@ namespace OSS.Tools.Tests.HttpTests
         [Test]
         public async Task FailProtectTest()
         {
-            OssHttpFormRequest req = new OssHttpFormRequest("http://www.baidu.com");
+            OssHttpRequest req = new OssHttpRequest("http://www.baidu.com");
 
-            req.AddFormPara("test","test");
+            //req.AddFormPara("test","test");
             req.http_method = HttpMethod.Post;
             
             //req.RequestSet = (r) =>
@@ -26,7 +26,10 @@ namespace OSS.Tools.Tests.HttpTests
             //    r.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
             //};
 
-            var resp=await req.SendAsync();
+            var resp =await req.SendAsync();
+            var str  = await resp.Content.ReadAsStringAsync();
+
+            Assert.IsTrue(!string.IsNullOrEmpty(str));
         }
      
 
