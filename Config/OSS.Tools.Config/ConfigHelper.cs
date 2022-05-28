@@ -1,32 +1,20 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.Json;
 
 namespace OSS.Tools.Config
 {
+    
     public static class ConfigHelper
     {
-        private static IConfiguration config;
-
+        /// <summary>
+        ///  配置信息
+        /// </summary>
         public static IConfiguration Configuration
         {
-            get
-            {
-                if (config != null) return config;
-
-                var basePat = GetBasePath();
-                config = new ConfigurationBuilder()
-                    .SetBasePath(basePat)
-                    .Add(new JsonConfigurationSource
-                    {
-                        Path = "appsettings.json",
-                        ReloadOnChange = true
-                    }).Build();
-                return config;
-            }
-            set => config = value;
+            get  ;
+            set;
         }
 
         private static string GetBasePath()
