@@ -113,15 +113,19 @@ namespace OSS.Tools.Http
         #endregion
     }
 
+
+
+
     /// <summary>
     ///  表单请求
     /// </summary>
-    [Obsolete]public class OssHttpFormRequest : OssHttpRequest
+    [Obsolete]
+    public class OssHttpFormRequest : OssHttpRequest
     {
         /// <summary>
         ///  请求构造函数
         /// </summary>
-        public OssHttpFormRequest()
+        public OssHttpFormRequest():this(string.Empty)
         {
         }
 
@@ -131,6 +135,7 @@ namespace OSS.Tools.Http
         /// <param name="reqUrl">请求地址</param>
         public OssHttpFormRequest(string reqUrl):base(reqUrl)
         {
+            http_method = HttpMethod.Post;
         }
     }
 
