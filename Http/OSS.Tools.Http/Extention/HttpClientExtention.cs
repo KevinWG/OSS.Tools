@@ -13,6 +13,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
@@ -59,6 +60,7 @@ namespace OSS.Tools.Http
            return SendAsync(client, request, completionOption, CancellationToken.None);
         }
 
+
         /// <summary>
         ///  执行请求方法
         /// </summary>
@@ -85,12 +87,48 @@ namespace OSS.Tools.Http
             return await client.SendAsync(reqMsg, completionOption, cancellationToken);
         }
 
+        /// <summary>
+        ///  读取响应内容中的字符串
+        /// </summary>
+        /// <param name="taskResp"></param>
+        /// <param name="disposeResponse"></param>
+        /// <returns></returns>
+        public static async Task<string> ReadStringAsync(this Task<HttpResponseMessage> taskResp, bool disposeResponse = true)
+        {
+            var resp   = await taskResp;
+            return await ReadStringAsync(resp, disposeResponse);
+        }
+
+        /// <summary>
+        ///  读取响应内容中的字符串
+        /// </summary>
+        /// <param name="resp"></param>
+        /// <param name="disposeResponse"></param>
+        /// <returns></returns>
+        public static async Task<string> ReadStringAsync(this HttpResponseMessage resp, bool disposeResponse = true)
+        {
+            var resStr = string.Empty;
+
+            if (resp.IsSuccessStatusCode && resp.StatusCode != HttpStatusCode.NoContent)
+            {
+                resStr = await resp.Content.ReadAsStringAsync();
+            }
+
+            if (disposeResponse)
+            {
+                resp.Dispose();
+            }
+
+            return resStr;
+        }
+
+
 
         #endregion
 
         #region  配置 ReqMsg信息
 
-    
+
         /// <summary>
         ///  配置使用的content
         /// </summary>
