@@ -22,7 +22,7 @@ namespace OSS.Tools.Http
     /// <summary>
     /// http请求辅助类
     /// </summary>
-    public static class RestExtention
+    public static class RestExtension
     {
         #region   扩展方法
 
@@ -65,7 +65,5 @@ namespace OSS.Tools.Http
         }
 
         #endregion
-
-       
     }
 }

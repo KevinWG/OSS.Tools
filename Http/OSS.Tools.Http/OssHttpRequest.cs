@@ -67,6 +67,8 @@ namespace OSS.Tools.Http
         {
         }
         
+
+
         #region   请求的内容参数
 
         internal List<FileParameter> FileParameters;
@@ -76,69 +78,46 @@ namespace OSS.Tools.Http
         /// 文件参数列表
         /// </summary>
         public IReadOnlyList<FileParameter> file_paras => FileParameters;
-
-        /// <summary>
-        ///  添加文件
-        /// </summary>
-        /// <param name="file"></param>
-        public OssHttpRequest AddFilePara(FileParameter file)
-        {
-            if (FileParameters == null)
-            {
-                FileParameters = new List<FileParameter>();
-            }
-            FileParameters.Add(file);
-            return this;
-        }
-
+        
         /// <summary>
         /// 非文件参数列表
         /// </summary>
         public IReadOnlyList<NameValuePair> form_paras => FormParameters; // 兼容老版本，取值时默认赋值
 
-        /// <summary>
-        ///  添加表单参数
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
-        public OssHttpRequest AddFormPara(string name, object value)
-        {
-            if (FormParameters == null)
-            {
-                FormParameters = new List<NameValuePair>();
-            }
-            FormParameters.Add(new NameValuePair(name, value));
-            return this;
-        }
         #endregion
     }
 
-
-
-
-    /// <summary>
-    ///  表单请求
-    /// </summary>
-    [Obsolete]
-    public class OssHttpFormRequest : OssHttpRequest
+    public static class OssHttpRequestExtension
     {
         /// <summary>
-        ///  请求构造函数
+        ///  添加文件
         /// </summary>
-        public OssHttpFormRequest():this(string.Empty)
+        /// <param name="req"></param>
+        /// <param name="file"></param>
+        public static OssHttpRequest AddFilePara(this OssHttpRequest req,FileParameter file)
         {
+            if (req.FileParameters == null)
+            {
+                req.FileParameters = new List<FileParameter>();
+            }
+            req.FileParameters.Add(file);
+            return req;
         }
 
         /// <summary>
-        /// 请求构造函数
+        ///  添加表单参数
         /// </summary>
-        /// <param name="reqUrl">请求地址</param>
-        public OssHttpFormRequest(string reqUrl):base(reqUrl)
+        /// <param name="req"></param>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        public static OssHttpRequest AddFormPara(this OssHttpRequest req, string name, object value)
         {
-            http_method = HttpMethod.Post;
+            if (req.FormParameters == null)
+            {
+                req.FormParameters = new List<NameValuePair>();
+            }
+            req.FormParameters.Add(new NameValuePair(name, value));
+            return req;
         }
     }
-
-
-
 }

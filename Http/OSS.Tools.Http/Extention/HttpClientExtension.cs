@@ -12,80 +12,39 @@
 
 using System;
 using System.IO;
+using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-//老版本命名空间兼容
-namespace OSS.Tools.Http.Extention
-{
-    public static class OldExtention
-    {
-        public static void No()
-        {
-
-        }
-    }
-}
-
-namespace OSS.Tools.Http.Mos
+namespace OSS.Tools.Http
 {
     /// <summary>
     ///  请求基类
     /// </summary>
-    public static class HttpClientExtention
+    public static class HttpClientExtension
     {
         private const string _lineBreak = "\r\n";
+
         /// <summary>
         ///   编码格式
         /// </summary>
-        public static Encoding Encoding { get; set; } = Encoding.UTF8;
+        internal static Encoding Encoding { get; set; } = Encoding.UTF8;
 
-        //private static readonly Dictionary<string,Action<HttpContentHeaders,string>> _notCanAddContentHeaderDics
-        //    =new Dictionary<string, Action<HttpContentHeaders, string>>();
 
         #region   扩展方法
-
-
-        /// <summary>
-        /// 发送Post请求
-        /// </summary>
-        /// <param name="request">请求的参数</param>
-        /// <param name="client"></param>
-        /// <returns>自定义的Response结果</returns>
-        public static Task<HttpResponseMessage> PostAsync(this HttpClient client, OssHttpRequest request)
-        {
-            request.HttpMethod = HttpMethod.Post;
-
-            return RestSend(client, request);
-        }
-
-        /// <summary>
-        /// 发送Get请求
-        /// </summary>
-        /// <param name="request">请求的参数</param>
-        /// <param name="client"></param>
-        /// <returns>自定义的Response结果</returns>
-        public static Task<HttpResponseMessage> GetAsync(this HttpClient client, OssHttpRequest request)
-        {
-            request.HttpMethod = HttpMethod.Get;
-
-            return RestSend(client,request);
-        }
-
-
-
-
+        
         /// <summary>
         ///  执行请求方法
         /// </summary>
         /// <param name="client"></param>
         /// <param name="request"></param>
         /// <returns></returns>
-        public static Task<HttpResponseMessage> RestSend(this HttpClient client, OssHttpRequest request)
+        public static Task<HttpResponseMessage> SendAsync(this HttpClient client, OssHttpRequest request)
         {
-            return RestSend(client, request, HttpCompletionOption.ResponseContentRead, CancellationToken.None);
+            return SendAsync(client, request, HttpCompletionOption.ResponseContentRead, CancellationToken.None);
         }
         
         /// <summary>
@@ -95,12 +54,13 @@ namespace OSS.Tools.Http.Mos
         /// <param name="request"></param>
         /// <param name="completionOption"></param>
         /// <returns></returns>
-        public static Task<HttpResponseMessage> RestSend(this HttpClient client, OssHttpRequest request,
+        public static Task<HttpResponseMessage> SendAsync(this HttpClient client, OssHttpRequest request,
             HttpCompletionOption completionOption)
         {
-           return  RestSend(client, request, completionOption, CancellationToken.None);
+           return SendAsync(client, request, completionOption, CancellationToken.None);
         }
-        
+
+
         /// <summary>
         ///  执行请求方法
         /// </summary>
@@ -109,27 +69,65 @@ namespace OSS.Tools.Http.Mos
         /// <param name="completionOption"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public static Task<HttpResponseMessage> RestSend(this HttpClient client, OssHttpRequest request,
-            HttpCompletionOption completionOption ,
+        public static async Task<HttpResponseMessage> SendAsync(this HttpClient client, OssHttpRequest request,
+            HttpCompletionOption completionOption,
             CancellationToken cancellationToken)
         {
+            request.PrepareSend();
+
             var reqMsg = new HttpRequestMessage
             {
-                RequestUri = string.IsNullOrEmpty(request.AddressUrl) ? request.Uri : new Uri(request.AddressUrl),
-                Method     = request.HttpMethod
+                RequestUri = new Uri(request.address_url),
+                Method     = request.http_method
             };
+            
+            PackageReqContent(reqMsg, request); //  配置内容
+            request.OnSending(reqMsg);
 
-            ConfigReqContent(reqMsg, request); //  配置内容
-            return client.SendAsync(reqMsg, completionOption, cancellationToken);
+            return await client.SendAsync(reqMsg, completionOption, cancellationToken);
         }
+
+        /// <summary>
+        ///  读取响应内容中的字符串
+        /// </summary>
+        /// <param name="taskResp"></param>
+        /// <param name="disposeResponse"></param>
+        /// <returns></returns>
+        public static async Task<string> ReadStringAsync(this Task<HttpResponseMessage> taskResp, bool disposeResponse = true)
+        {
+            var resp   = await taskResp;
+            return await ReadStringAsync(resp, disposeResponse);
+        }
+
+        /// <summary>
+        ///  读取响应内容中的字符串
+        /// </summary>
+        /// <param name="resp"></param>
+        /// <param name="disposeResponse"></param>
+        /// <returns></returns>
+        public static async Task<string> ReadStringAsync(this HttpResponseMessage resp, bool disposeResponse = true)
+        {
+            var resStr = string.Empty;
+
+            if (resp.IsSuccessStatusCode && resp.StatusCode != HttpStatusCode.NoContent)
+            {
+                resStr = await resp.Content.ReadAsStringAsync();
+            }
+
+            if (disposeResponse)
+            {
+                resp.Dispose();
+            }
+
+            return resStr;
+        }
+
 
 
         #endregion
 
         #region  配置 ReqMsg信息
 
-    
-        
 
         /// <summary>
         ///  配置使用的content
@@ -137,24 +135,21 @@ namespace OSS.Tools.Http.Mos
         /// <param name="reqMsg"></param>
         /// <param name="req"></param>
         /// <returns></returns>
-        private static void ConfigReqContent(HttpRequestMessage reqMsg, OssHttpRequest req)
+        private static void PackageReqContent(HttpRequestMessage reqMsg, OssHttpRequest req)
         {
-            if (req.HttpMethod == HttpMethod.Get)
-            {
-                req.RequestSet?.Invoke(reqMsg);
+            if (req.http_method == HttpMethod.Get)
                 return;
-            }
 
-            if (req.HasFile)
+            if (req.file_paras!=null&& req.file_paras.Any())
             {
                 var boundary =GetBoundary();
-
+                
                 var memory=new MemoryStream();
                 WriteMultipartFormData(memory, req, boundary);
                 memory.Seek(0, SeekOrigin.Begin);//设置指针到起点
-                
+
                 reqMsg.Content = new StreamContent(memory);
-                req.RequestSet?.Invoke(reqMsg);  
+                //req.RequestSet?.Invoke(reqMsg);
 
                 reqMsg.Content.Headers.Remove("Content-Type");
                 reqMsg.Content.Headers.TryAddWithoutValidation("Content-Type", $"multipart/form-data;boundary={boundary}");
@@ -162,12 +157,13 @@ namespace OSS.Tools.Http.Mos
             else
             {
                 var data = GetNormalFormData(req);
-               
-                reqMsg.Content = new StringContent(data);
-                req.RequestSet?.Invoke(reqMsg);
+                if (!string.IsNullOrEmpty(data))
+                {
+                    // 默认表单提交，上层应用程序可以设置
+                    reqMsg.Content = new StringContent(data, Encoding.UTF8, "application/x-www-form-urlencoded");
+                }
             }
-
-          
+      
         }
 
         #endregion
@@ -185,15 +181,15 @@ namespace OSS.Tools.Http.Mos
         /// <param name="boundary"></param>
         private static void WriteMultipartFormData(Stream memory, OssHttpRequest request, string boundary)
         {
-            if (request.FormParameters!=null)
+            if (request.form_paras != null)
             {
-                foreach (var param in request.FormParameters)
+                foreach (var param in request.form_paras)
                 {
                     WriteStringTo(memory, GetMultipartFormData(param, boundary));
                 }
             }
             
-            foreach (var file in request.FileParameters)
+            foreach (var file in request.file_paras)
             {
                 //文件头
                 WriteStringTo(memory, GetMultipartFileHeader(file, boundary));
@@ -223,10 +219,10 @@ namespace OSS.Tools.Http.Mos
         /// <param name="param"></param>
         /// <param name="boundary"></param>
         /// <returns></returns>
-        private static string GetMultipartFormData(FormParameter param, string boundary)
+        private static string GetMultipartFormData(NameValuePair param, string boundary)
         {
             return
-                $"--{boundary}{_lineBreak}Content-Disposition: form-data; name=\"{param.Name}\"{_lineBreak}{_lineBreak}{param.Value}{_lineBreak}";
+                $"--{boundary}{_lineBreak}Content-Disposition: form-data; name=\"{param.name}\"{_lineBreak}{_lineBreak}{param.value}{_lineBreak}";
         }
 
         /// <summary>
@@ -250,10 +246,9 @@ namespace OSS.Tools.Http.Mos
         private static string GetNormalFormData(OssHttpRequest request)
         {
             var formstring = new StringBuilder();
-
-            if (request.FormParameters!=null)
+            if (request.form_paras != null)
             {
-                foreach (var p in request.FormParameters)
+                foreach (var p in request.form_paras)
                 {
                     if (formstring.Length > 1)
                         formstring.Append("&");
@@ -261,11 +256,13 @@ namespace OSS.Tools.Http.Mos
                 }
             }
          
-            if (string.IsNullOrEmpty(request.CustomBody)) return formstring.ToString();
+            if (string.IsNullOrEmpty(request.custom_body))
+                return formstring.ToString();
 
             if (formstring.Length > 1)
                 formstring.Append("&");
-            formstring.Append(request.CustomBody);
+
+            formstring.Append(request.custom_body);
             return formstring.ToString();
         }
         #endregion
