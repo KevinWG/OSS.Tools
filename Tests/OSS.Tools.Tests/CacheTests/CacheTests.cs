@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using OSS.Common.BasicMos.Resp;
+using OSS.Common.Resp;
 using OSS.Tools.Cache;
 
 namespace OSS.Tools.Tests.CacheTests
@@ -38,7 +38,7 @@ namespace OSS.Tools.Tests.CacheTests
         [Test]
         public async Task GetTest()
         {
-            var r = await CacheHelper.GetOrSetAbsoluteAsync("test_userkey"
+            var r = await CacheHelper.GetOrSetAbsoluteAsync("test_userkey1111111"
                 , () => Task.FromResult(2), TimeSpan.FromHours(2));
 
             // CacheHelper
