@@ -20,7 +20,7 @@ namespace OSS.Tools.Cache
         /// <param name="hitProtectedSeconds">缓存击穿保护秒数，默认值10。</param>
         /// <param name="sourceName">来源名称</param>
         /// <returns></returns>
-        public static Task<RType> GetOrSetAsync<RType>(this Func<Task<RType>> getFunc, string cacheKey,
+        public static Task<RType> WithCacheAsync<RType>(this Func<Task<RType>> getFunc, string cacheKey,
             TimeSpan slidingExpiration, int hitProtectedSeconds = 10, string sourceName = "default")
         {
             return CacheHelper.GetOrSetAsync(cacheKey, getFunc, new CacheTimeOptions() { sliding_expiration = slidingExpiration }, null, hitProtectedSeconds, sourceName);
@@ -37,7 +37,7 @@ namespace OSS.Tools.Cache
         /// <param name="hitProtectedSeconds">缓存击穿保护秒数，默认值10。</param>
         /// <param name="sourceName">来源名称</param>
         /// <returns></returns>
-        public static Task<RType> GetOrSetAsync<RType>(this Func<Task<RType>> getFunc, string cacheKey, TimeSpan slidingExpiration,
+        public static Task<RType> WithCacheAsync<RType>(this Func<Task<RType>> getFunc, string cacheKey, TimeSpan slidingExpiration,
             Func<RType, bool> beforeSettingChecker, int hitProtectedSeconds = 10,
             string sourceName = "default")
         {
@@ -55,7 +55,7 @@ namespace OSS.Tools.Cache
         /// <param name="hitProtectedSeconds">缓存击穿保护秒数，默认值10。</param>
         /// <param name="sourceName">来源名称</param>
         /// <returns></returns>
-        public static Task<RType> GetOrSetAbsoluteAsync<RType>(this Func<Task<RType>> getFunc, string cacheKey, TimeSpan absoluteExpiration, int hitProtectedSeconds = 10, string sourceName = "default")
+        public static Task<RType> WithCacheAbsoluteAsync<RType>(this Func<Task<RType>> getFunc, string cacheKey, TimeSpan absoluteExpiration, int hitProtectedSeconds = 10, string sourceName = "default")
         {
             return CacheHelper.GetOrSetAsync(cacheKey, getFunc, new CacheTimeOptions() { absolute_expiration_relative_to_now = absoluteExpiration }, null
                 , hitProtectedSeconds, sourceName);
@@ -73,7 +73,7 @@ namespace OSS.Tools.Cache
         /// <param name="hitProtectedSeconds">缓存击穿保护秒数，默认值10。</param>
         /// <param name="sourceName">来源名称</param>
         /// <returns></returns>
-        public static Task<RType> GetOrSetAbsoluteAsync<RType>(this Func<Task<RType>> getFunc, string cacheKey, TimeSpan absoluteExpiration,
+        public static Task<RType> WithAbsoluteCacheAsync<RType>(this Func<Task<RType>> getFunc, string cacheKey, TimeSpan absoluteExpiration,
             Func<RType, bool> beforeSettingChecker, int hitProtectedSeconds = 10, string sourceName = "default")
         {
             return CacheHelper.GetOrSetAsync(cacheKey, getFunc,
@@ -97,7 +97,7 @@ namespace OSS.Tools.Cache
         /// <param name="hitProtectedSeconds">缓存击穿保护秒数，默认值10。</param>
         /// <param name="sourceName">来源名称</param>
         /// <returns></returns>
-        public static Task<RType> GetOrSetAsync<RType>(this Func<Task<RType>> getFunc, string cacheKey, CacheTimeOptions cacheTimeOpt,
+        public static Task<RType> WithCacheAsync<RType>(this Func<Task<RType>> getFunc, string cacheKey, CacheTimeOptions cacheTimeOpt,
             Func<RType, bool> beforeSettingChecker = null, int hitProtectedSeconds = 10, string sourceName = "default")
         {
             return CacheHelper.GetOrSetAsync(cacheKey, getFunc, cacheTimeOpt, beforeSettingChecker, hitProtectedSeconds, sourceName);
