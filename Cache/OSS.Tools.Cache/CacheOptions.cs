@@ -69,7 +69,7 @@ namespace OSS.Tools.Cache
     }
 
 
-    public static class CacheTimeOptionsExtension
+    internal static class CacheTimeOptionsExtension
     {
         public static MemoryCacheEntryOptions ToMemCacheTimeOpt(this CacheTimeOptions cOpt)
         {
