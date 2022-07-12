@@ -96,7 +96,7 @@ namespace OSS.Tools.Http
         public static async Task<string> ReadStringAsync(this Task<HttpResponseMessage> taskResp, bool disposeResponse = true)
         {
             var resp   = await taskResp;
-            return await ReadStringAsync(resp, disposeResponse);
+            return await ReadContentAsStringAsync(resp, disposeResponse);
         }
 
         /// <summary>
@@ -105,13 +105,13 @@ namespace OSS.Tools.Http
         /// <param name="resp"></param>
         /// <param name="disposeResponse"></param>
         /// <returns></returns>
-        public static async Task<string> ReadStringAsync(this HttpResponseMessage resp, bool disposeResponse = true)
+        public static async Task<string> ReadContentAsStringAsync(this HttpResponseMessage resp, bool disposeResponse = true)
         {
             var resStr = string.Empty;
 
-            if (resp.IsSuccessStatusCode && resp.StatusCode != HttpStatusCode.NoContent)
+            if (resp.StatusCode != HttpStatusCode.NoContent)
             {
-                resStr = await resp.Content.ReadAsStringAsync();
+                resStr = await resp .Content.ReadAsStringAsync();
             }
 
             if (disposeResponse)
