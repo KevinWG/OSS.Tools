@@ -93,7 +93,7 @@ namespace OSS.Tools.Http
         /// <param name="taskResp"></param>
         /// <param name="disposeResponse"></param>
         /// <returns></returns>
-        public static async Task<string> ReadStringAsync(this Task<HttpResponseMessage> taskResp, bool disposeResponse = true)
+        public static async Task<string> ReadContentAsStringAsync(this Task<HttpResponseMessage> taskResp, bool disposeResponse = true)
         {
             var resp   = await taskResp;
             return await ReadContentAsStringAsync(resp, disposeResponse);
