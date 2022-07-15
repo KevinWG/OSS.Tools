@@ -20,13 +20,16 @@ namespace OSS.Tools.Log
     /// </summary>
     public static class LogHelper
     {
+        /// <summary>
+        ///  默认日志工具
+        /// </summary>
+        public static IToolLog DefaultLogTool { get; set; }= new DefaultToolLog();
 
-        private static readonly DefaultToolLog defaultCache = new DefaultToolLog();
-
+        
         /// <summary>
         ///   日志来源提供者
         /// </summary>
-        public static Func<string, IToolLog> LogWriterProvider { get; set; }
+        public static Func<string, IToolLog> LogToolProvider { get; set; }
 
         /// <summary>
         ///  对日志内容格式化
@@ -44,7 +47,7 @@ namespace OSS.Tools.Log
             if (string.IsNullOrEmpty(logModule))
                 logModule = "default";
 
-            return LogWriterProvider?.Invoke(logModule) ?? defaultCache;
+            return LogToolProvider?.Invoke(logModule) ?? DefaultLogTool;
         }
 
         /// <summary>

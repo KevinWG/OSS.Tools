@@ -18,10 +18,10 @@ using System.Xml.Serialization;
 
 namespace OSS.Tools.DirConfig
 {
-
     /// <summary>
     /// 默认配置处理
     /// </summary>
+    /// 
     public class DefaultToolDirConfig : IToolDirConfig
     {
         private static string _defaultPath;
@@ -49,20 +49,15 @@ namespace OSS.Tools.DirConfig
         }
 
         private const string _folderName = "Configs";
-        /// <summary>
-        /// 设置字典配置信息
-        /// </summary>
-        /// <typeparam name="TConfig"></typeparam>
-        /// <param name="key"></param>
-        /// <param name="dirConfig"></param>
-        /// <returns></returns>
-        public Task<bool> SetDirConfig<TConfig>(string key, TConfig dirConfig) where TConfig : class, new()
+
+        /// <inheritdoc />
+        public Task<bool> SetDirConfig<TConfig>(string key, TConfig dirConfig, string sourceName) where TConfig : class, new()
         {
             if (string.IsNullOrEmpty(key))
-                throw new ArgumentNullException("key", "配置键值不能为空！");
+                throw new ArgumentNullException(nameof(key), "配置键值不能为空！");
 
             if (dirConfig == null)
-                throw new ArgumentNullException("dirConfig", "配置信息不能为空！");
+                throw new ArgumentNullException(nameof(dirConfig), "配置信息不能为空！");
             
             FileStream fs = null;
             try
@@ -85,17 +80,12 @@ namespace OSS.Tools.DirConfig
         }
 
 
-        /// <summary>
-        ///   获取字典配置
-        /// </summary>
-        /// <typeparam name="TConfig"></typeparam>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public Task<TConfig> GetDirConfig<TConfig>(string key) where TConfig : class, new()
+        /// <inheritdoc />
+        public Task<TConfig> GetDirConfig<TConfig>(string key, string sourceName) where TConfig : class, new()
         {
 
             if (string.IsNullOrEmpty(key))
-                throw new ArgumentNullException("key", "配置键值不能为空！");
+                throw new ArgumentNullException(nameof(key), "配置键值不能为空！");
 
             FileStream fs = null;
             try
@@ -118,12 +108,9 @@ namespace OSS.Tools.DirConfig
             }
         }
 
-        /// <summary>
-        ///  移除配置信息
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public Task RemoveDirConfig(string key)
+
+        /// <inheritdoc />
+        public Task RemoveDirConfig(string key, string sourceName)
         {
             var fileName = string.Concat(_defaultPath, Path.DirectorySeparatorChar, key, ".config");
             

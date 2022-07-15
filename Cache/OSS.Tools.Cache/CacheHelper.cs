@@ -21,12 +21,12 @@ namespace OSS.Tools.Cache
     /// </summary>
     public static class CacheHelper
     {
-        private static readonly DefaultToolCache defaultCache = new DefaultToolCache();
+        private static  IToolCache DefaultCacheTool { get; set; } = new DefaultToolCache();
 
         /// <summary>
         /// 缓存来源提供者
         /// </summary>
-        public static Func<string, IToolCache> CacheProvider { get; set; }
+        public static Func<string, IToolCache> CacheToolProvider { get; set; }
 
         /// <summary>
         /// 来源名称格式化
@@ -46,7 +46,7 @@ namespace OSS.Tools.Cache
             if (SourceFormat != null)
                 sourceName = SourceFormat.Invoke(sourceName);
 
-            return CacheProvider?.Invoke(sourceName) ?? defaultCache;
+            return CacheToolProvider?.Invoke(sourceName) ?? DefaultCacheTool;
         }
 
 

@@ -21,12 +21,16 @@ namespace OSS.Tools.DirConfig
     /// </summary>
     public static class DirConfigHelper
     {
-        private static readonly DefaultToolDirConfig defaultCache = new DefaultToolDirConfig();
+        public static  IToolDirConfig DefaultDirTool
+        {
+            get;
+            set;
+        } = new DefaultToolDirConfig();
 
         /// <summary>
         ///   配置信息来源提供者
         /// </summary>
-        public static Func<string, IToolDirConfig> DirConfigProvider { get; set; }
+        public static Func<string, IToolDirConfig> DirToolProvider { get; set; }
 
         /// <summary>
         /// 来源名称格式化
@@ -46,7 +50,7 @@ namespace OSS.Tools.DirConfig
             if (SourceFormat != null)
                 sourceName = SourceFormat.Invoke(sourceName);
 
-            return DirConfigProvider?.Invoke(sourceName) ?? defaultCache;
+            return DirToolProvider?.Invoke(sourceName) ?? DefaultDirTool;
         }
 
 
@@ -61,7 +65,7 @@ namespace OSS.Tools.DirConfig
         public static Task<bool> SetDirConfig<TConfig>(string key, TConfig dirConfig,
             string sourceName = "default") where TConfig : class, new()
         {
-            return GetDirConfig(sourceName).SetDirConfig(key, dirConfig);
+            return GetDirConfig(sourceName).SetDirConfig(key, dirConfig,sourceName);
         }
 
 
@@ -75,7 +79,7 @@ namespace OSS.Tools.DirConfig
         public static Task<TConfig> GetDirConfig<TConfig>(string key, string sourceName = "default")
             where TConfig : class, new()
         {
-            return GetDirConfig(sourceName).GetDirConfig<TConfig>(key);
+            return GetDirConfig(sourceName).GetDirConfig<TConfig>(key, sourceName);
         }
 
         /// <summary>
@@ -86,7 +90,7 @@ namespace OSS.Tools.DirConfig
         /// <returns></returns>
         public static Task RemoveDirConfig(string key, string sourceName = "default")
         {
-            return GetDirConfig(sourceName).RemoveDirConfig(key);
+            return GetDirConfig(sourceName).RemoveDirConfig(key, sourceName);
         }
 
 
