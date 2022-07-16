@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>2.2</Version>
+    <Version>2.2.1</Version>
     <PackageReleaseNotes></PackageReleaseNotes>
     <PackageIconUrl>http://img1.osscore.cn/static/oss_net.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/KevinWG/OSS.Tools</PackageProjectUrl>

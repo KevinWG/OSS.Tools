@@ -29,7 +29,7 @@ namespace OSS.Tools.DirConfig
         /// <param name="sourceName">来源名称</param>
         /// <typeparam name="TConfig">配置信息类型</typeparam>
         /// <returns></returns>
-        Task<bool> SetDirConfig<TConfig>(string key, TConfig dirConfig, string sourceName) where TConfig : class ,new();
+        Task<bool> SetDirConfig<TConfig>(string key, TConfig dirConfig, string sourceName);
 
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace OSS.Tools.DirConfig
         /// <param name="sourceName">来源名称</param>
         /// <typeparam name="TConfig">配置信息类型</typeparam>
         /// <returns></returns>
-        Task<TConfig> GetDirConfig<TConfig>(string key, string sourceName) where TConfig : class ,new();
+        Task<TConfig> GetDirConfig<TConfig>(string key, string sourceName);
 
         /// <summary>
         /// 移除配置信息

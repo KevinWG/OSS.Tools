@@ -27,7 +27,7 @@ namespace OSS.Tools.Log
 
         
         /// <summary>
-        ///   日志来源提供者
+        ///   日志工具提供者
         /// </summary>
         public static Func<string, IToolLog> LogToolProvider { get; set; }
 
@@ -44,9 +44,6 @@ namespace OSS.Tools.Log
         /// <returns></returns>
         public static IToolLog GetLogWrite(string logModule)
         {
-            if (string.IsNullOrEmpty(logModule))
-                logModule = "default";
-
             return LogToolProvider?.Invoke(logModule) ?? DefaultLogTool;
         }
 
@@ -56,7 +53,7 @@ namespace OSS.Tools.Log
         /// <param name="msg"> 日志信息  </param>
         /// <param name="msgKey">  关键值  </param>
         /// <param name="sourceName"> 来源名称 </param>
-        public static string Info(object msg, string msgKey = null, string sourceName = "default")
+        public static string Info(object msg, string msgKey = null, string sourceName = "")
         {
             return Log(new LogInfo(LogLevelEnum.Info, msg, msgKey, sourceName));
         }
@@ -67,7 +64,7 @@ namespace OSS.Tools.Log
         /// <param name="msg"> 日志信息  </param>
         /// <param name="msgKey">  关键值  </param>
         /// <param name="sourceName">来源名称</param>
-        public static string Warning(object msg, string msgKey = null, string sourceName = "default")
+        public static string Warning(object msg, string msgKey = null, string sourceName = "")
         {
             return Log(new LogInfo(LogLevelEnum.Warning, msg, msgKey, sourceName));
         }
@@ -78,7 +75,7 @@ namespace OSS.Tools.Log
         /// <param name="msg"> 日志信息  </param>
         /// <param name="msgKey">  关键值  </param>
         /// <param name="sourceName">来源名称</param>
-        public static string Error(object msg, string msgKey = null, string sourceName = "default")
+        public static string Error(object msg, string msgKey = null, string sourceName = "")
         {
             return Log(new LogInfo(LogLevelEnum.Error, msg, msgKey, sourceName));
         }
@@ -89,7 +86,7 @@ namespace OSS.Tools.Log
         /// <param name="msg"> 日志信息  </param>
         /// <param name="msgKey">  关键值  </param>
         /// <param name="sourceName">来源名称</param>
-        public static string Trace(object msg, string msgKey = null, string sourceName = "default")
+        public static string Trace(object msg, string msgKey = null, string sourceName = "")
         {
             return Log(new LogInfo(LogLevelEnum.Trace, msg, msgKey, sourceName));
         }
@@ -103,7 +100,7 @@ namespace OSS.Tools.Log
             try
             {
                 if (string.IsNullOrEmpty(info.source_name))
-                    info.source_name = "default";
+                    info.source_name = "";
 
                 LogFormat?.Invoke(info);
                 GetLogWrite(info.source_name)?.WriteLogAsync(info);

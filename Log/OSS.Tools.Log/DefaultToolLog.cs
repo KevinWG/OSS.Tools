@@ -38,8 +38,10 @@ namespace OSS.Tools.Log
 
         private string getLogFilePath(string module, LogLevelEnum level)
         {
-            var date = DateTime.Now;
-            var dirPath = Path.Combine(_logBaseDirPath, string.Concat(module, "_", level),
+            var date       = DateTime.Now;
+            var moduleName = string.IsNullOrEmpty(module) ? "default" : module;
+
+            var dirPath = Path.Combine(_logBaseDirPath, string.Concat(moduleName, "_", level),
                 DateTime.Now.ToString("yyyyMM")); //string.Format(@"{0}\{1}\{2}\",_logBaseDirPath, module, level);
 
             if (!Directory.Exists(dirPath))

@@ -59,7 +59,7 @@ namespace OSS.Tools.Log
         /// <param name="logMsg"></param>
         /// <param name="msgKey"></param>
         /// <param name="sourceName"></param>
-        internal LogInfo(LogLevelEnum loglevel, object logMsg, string msgKey = null, string sourceName = "default")
+        internal LogInfo(LogLevelEnum loglevel, object logMsg, string msgKey = null, string sourceName = "")
         {
             level = loglevel;
             source_name = sourceName;

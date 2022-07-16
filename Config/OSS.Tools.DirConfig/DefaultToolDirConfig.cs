@@ -51,7 +51,7 @@ namespace OSS.Tools.DirConfig
         private const string _folderName = "Configs";
 
         /// <inheritdoc />
-        public Task<bool> SetDirConfig<TConfig>(string key, TConfig dirConfig, string sourceName) where TConfig : class, new()
+        public Task<bool> SetDirConfig<TConfig>(string key, TConfig dirConfig, string sourceName)
         {
             if (string.IsNullOrEmpty(key))
                 throw new ArgumentNullException(nameof(key), "配置键值不能为空！");
@@ -81,7 +81,7 @@ namespace OSS.Tools.DirConfig
 
 
         /// <inheritdoc />
-        public Task<TConfig> GetDirConfig<TConfig>(string key, string sourceName) where TConfig : class, new()
+        public Task<TConfig> GetDirConfig<TConfig>(string key, string sourceName)
         {
 
             if (string.IsNullOrEmpty(key))

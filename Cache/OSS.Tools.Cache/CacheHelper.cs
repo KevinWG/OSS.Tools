@@ -38,11 +38,8 @@ namespace OSS.Tools.Cache
         /// </summary>
         /// <param name="sourceName"></param>
         /// <returns></returns>
-        public static IToolCache GetCache(string sourceName= "default")
+        public static IToolCache GetCache(string sourceName= "")
         {
-            if (string.IsNullOrEmpty(sourceName))
-                sourceName = "default";
-
             if (SourceFormat != null)
                 sourceName = SourceFormat.Invoke(sourceName);
 
@@ -62,7 +59,7 @@ namespace OSS.Tools.Cache
         /// <param name="slidingExpiration">滚动过期时长，访问后自动延长</param>
         /// <param name="sourceName">来源名称</param>
         /// <returns>是否添加成功</returns>
-        public static Task<bool> SetAsync<T>(string key, T obj, TimeSpan slidingExpiration, string sourceName = "default")
+        public static Task<bool> SetAsync<T>(string key, T obj, TimeSpan slidingExpiration, string sourceName = "")
         {
             return SetAsync(key, obj,new CacheTimeOptions(){sliding_expiration = slidingExpiration },  sourceName);
         }
@@ -76,7 +73,7 @@ namespace OSS.Tools.Cache
         /// <param name="absoluteExpiration"> 固定过期时长，设置后到时过期 </param>
         /// <param name="sourceName">来源名称</param>
         /// <returns>是否添加成功</returns>
-        public static Task<bool> SetAbsoluteAsync<T>(string key, T obj, TimeSpan absoluteExpiration, string sourceName = "default")
+        public static Task<bool> SetAbsoluteAsync<T>(string key, T obj, TimeSpan absoluteExpiration, string sourceName = "")
         {
             return SetAsync(key, obj, new CacheTimeOptions(){absolute_expiration_relative_to_now = absoluteExpiration}, sourceName);
         }
@@ -90,7 +87,7 @@ namespace OSS.Tools.Cache
         /// <param name="opt">缓存过期时间选项</param>
         /// <param name="sourceName"></param>
         /// <returns></returns>
-        public static Task<bool> SetAsync<T>(string key, T obj, CacheTimeOptions opt, string sourceName = "default")
+        public static Task<bool> SetAsync<T>(string key, T obj, CacheTimeOptions opt, string sourceName = "")
         {
             return GetCache(sourceName).SetAsync(key, obj, opt);
         }
@@ -106,7 +103,7 @@ namespace OSS.Tools.Cache
         /// <param name="key">key</param>
         /// <param name="sourceName">来源名称</param>
         /// <returns>获取指定key对应的值 </returns>
-        public static Task<T> GetAsync<T>(string key, string sourceName = "default")
+        public static Task<T> GetAsync<T>(string key, string sourceName = "")
         {
             return GetCache(sourceName).GetAsync<T>(key);
         }
@@ -127,7 +124,7 @@ namespace OSS.Tools.Cache
         /// <param name="sourceName">来源名称</param>
         /// <returns></returns>
         public static Task<RType> GetOrSetAsync<RType>(string cacheKey, Func<Task<RType>> getFunc,
-            TimeSpan slidingExpiration, int hitProtectedSeconds = 10, string sourceName = "default")
+            TimeSpan slidingExpiration, int hitProtectedSeconds = 10, string sourceName = "")
         {
             return GetOrSetAsync(cacheKey, getFunc, new CacheTimeOptions() { sliding_expiration = slidingExpiration }, null, hitProtectedSeconds, sourceName);
         }
@@ -145,7 +142,7 @@ namespace OSS.Tools.Cache
         /// <returns></returns>
         public static Task<RType> GetOrSetAsync<RType>(string cacheKey, Func<Task<RType>> getFunc,TimeSpan slidingExpiration,
             Func<RType, bool> beforeSettingChecker, int hitProtectedSeconds = 10, 
-            string sourceName = "default")
+            string sourceName = "")
         {
             return GetOrSetAsync(cacheKey, getFunc,new CacheTimeOptions(){sliding_expiration = slidingExpiration}, beforeSettingChecker, hitProtectedSeconds, sourceName);
         }
@@ -161,7 +158,7 @@ namespace OSS.Tools.Cache
         /// <param name="hitProtectedSeconds">缓存击穿保护秒数，默认值10。</param>
         /// <param name="sourceName">来源名称</param>
         /// <returns></returns>
-        public static Task<RType> GetOrSetAbsoluteAsync<RType>(string cacheKey, Func<Task<RType>> getFunc, TimeSpan absoluteExpiration, int hitProtectedSeconds = 10, string sourceName = "default")
+        public static Task<RType> GetOrSetAbsoluteAsync<RType>(string cacheKey, Func<Task<RType>> getFunc, TimeSpan absoluteExpiration, int hitProtectedSeconds = 10, string sourceName = "")
         {
             return GetOrSetAsync(cacheKey, getFunc, new CacheTimeOptions() { absolute_expiration_relative_to_now = absoluteExpiration }, null
                 , hitProtectedSeconds, sourceName);
@@ -180,7 +177,7 @@ namespace OSS.Tools.Cache
         /// <param name="sourceName">来源名称</param>
         /// <returns></returns>
         public static Task<RType> GetOrSetAbsoluteAsync<RType>(string cacheKey, Func<Task<RType>> getFunc,TimeSpan absoluteExpiration,
-            Func<RType, bool> beforeSettingChecker, int hitProtectedSeconds = 10,string sourceName = "default")
+            Func<RType, bool> beforeSettingChecker, int hitProtectedSeconds = 10,string sourceName = "")
         {
             return GetOrSetAsync(cacheKey, getFunc, new CacheTimeOptions(){absolute_expiration_relative_to_now = absoluteExpiration}, beforeSettingChecker, hitProtectedSeconds, sourceName);
         }
@@ -199,7 +196,7 @@ namespace OSS.Tools.Cache
         /// <param name="sourceName">来源名称</param>
         /// <returns></returns>
         public static async Task<RType> GetOrSetAsync<RType>(string cacheKey, Func<Task<RType>> getFunc, CacheTimeOptions cacheTimeOpt,
-            Func<RType, bool> beforeSettingChecker = null, int hitProtectedSeconds = 10, string sourceName = "default")
+            Func<RType, bool> beforeSettingChecker = null, int hitProtectedSeconds = 10, string sourceName = "")
         {
             if (getFunc == null)
                 throw new ArgumentNullException("获取原始数据方法(getFunc)不能为空!");
@@ -251,7 +248,7 @@ namespace OSS.Tools.Cache
         /// <param name="key"></param>
         /// <param name="sourceName">来源名称</param>
         /// <returns>是否成功</returns>
-        public static Task<bool> RemoveAsync(string key, string sourceName = "default")
+        public static Task<bool> RemoveAsync(string key, string sourceName = "")
         {
             return GetCache(sourceName).RemoveAsync(key);
         }
@@ -262,12 +259,10 @@ namespace OSS.Tools.Cache
         /// <param name="keys"></param>
         /// <param name="sourceName">来源名称</param>
         /// <returns>是否成功</returns>
-        public static Task<bool> RemoveAsync(string[] keys, string sourceName = "default")
+        public static Task<bool> RemoveAsync(string[] keys, string sourceName = "")
         {
             return GetCache(sourceName).RemoveAsync(keys);
         }
-
-
 
         #region 过时方法
 
@@ -279,14 +274,14 @@ namespace OSS.Tools.Cache
         /// <param name="sourceName">来源名称</param>
         /// <returns>获取指定key对应的值 </returns>
         [Obsolete("请使用 GetAsync")]
-        public static T Get<T>(string key, string sourceName = "default")
+        public static T Get<T>(string key, string sourceName = "")
         {
             return GetAsync<T>(key, sourceName).Result;
         }
 
 
         [Obsolete("请使用 RemoveAsync")]
-        public static bool Remove(string key, string sourceName = "default")
+        public static bool Remove(string key, string sourceName = "")
         {
             return RemoveAsync(key,sourceName).Result;
         }
@@ -301,7 +296,7 @@ namespace OSS.Tools.Cache
         /// <param name="sourceName">来源名称</param>
         /// <returns>是否添加成功</returns>
         [Obsolete("请使用 SetAsync")]
-        public static bool Set<T>(string key, T obj, TimeSpan slidingExpiration, string sourceName = "default")
+        public static bool Set<T>(string key, T obj, TimeSpan slidingExpiration, string sourceName = "")
         {
             return SetAsync(key, obj, slidingExpiration, sourceName).Result;
         }
@@ -316,7 +311,7 @@ namespace OSS.Tools.Cache
         /// <param name="sourceName">来源名称</param>
         /// <returns>是否添加成功</returns>
         [Obsolete("请使用 SetAbsoluteAsync")]
-        public static bool Set<T>(string key, T obj, DateTime absoluteExpiration, string sourceName = "default")
+        public static bool Set<T>(string key, T obj, DateTime absoluteExpiration, string sourceName = "")
         {
             return SetAbsoluteAsync(key, obj, TimeSpan.FromTicks((absoluteExpiration - DateTime.Now).Ticks), sourceName).Result;
         }
