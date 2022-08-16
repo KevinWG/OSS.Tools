@@ -74,12 +74,12 @@ namespace OSS.Tools.Http
         /// <param name="request"></param>
         /// <param name="body"></param>
         /// <returns></returns>
-        public static Task<HttpResponseMessage> PostAsync(this OssHttpRequest request,string body)
+        public static Task<HttpResponseMessage> PostAsync(this OssHttpRequest request,string body, string clientSourceName = null)
         { 
             request.http_method = HttpMethod.Post;
             request.custom_body = body;
 
-            return request.SendAsync();
+            return request.SendAsync(clientSourceName);
         }
 
 
@@ -89,7 +89,7 @@ namespace OSS.Tools.Http
         /// <param name="request"></param>
         /// <param name="queryParas">请求参数</param>
         /// <returns></returns>
-        public static Task<HttpResponseMessage> GetAsync(this OssHttpRequest request,Dictionary<string,string> queryParas = null)
+        public static Task<HttpResponseMessage> GetAsync(this OssHttpRequest request,Dictionary<string,string> queryParas = null, string clientSourceName = null)
         {
             request.http_method = HttpMethod.Get;
 
@@ -99,7 +99,7 @@ namespace OSS.Tools.Http
                 request.address_url = string.Concat(request.address_url?.IndexOf("?") >= 0 ? "&" : "?", strParas);
             }
 
-            return request.SendAsync();
+            return request.SendAsync(clientSourceName);
         }
 
 
