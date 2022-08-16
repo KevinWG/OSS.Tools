@@ -74,7 +74,7 @@ namespace OSS.Tools.Http
         /// <param name="request"></param>
         /// <param name="body"></param>
         /// <returns></returns>
-        public static Task<HttpResponseMessage> Post(this OssHttpRequest request,string body)
+        public static Task<HttpResponseMessage> PostAsync(this OssHttpRequest request,string body)
         { 
             request.http_method = HttpMethod.Post;
             request.custom_body = body;
@@ -89,7 +89,7 @@ namespace OSS.Tools.Http
         /// <param name="request"></param>
         /// <param name="queryParas">请求参数</param>
         /// <returns></returns>
-        public static Task<HttpResponseMessage> Get(this OssHttpRequest request,Dictionary<string,string> queryParas = null)
+        public static Task<HttpResponseMessage> GetAsync(this OssHttpRequest request,Dictionary<string,string> queryParas = null)
         {
             request.http_method = HttpMethod.Get;
 
