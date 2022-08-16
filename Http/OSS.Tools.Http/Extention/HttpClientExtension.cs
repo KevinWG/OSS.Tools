@@ -70,19 +70,22 @@ namespace OSS.Tools.Http
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public static async Task<HttpResponseMessage> SendAsync(this HttpClient client, OssHttpRequest request,
-            HttpCompletionOption completionOption,
-            CancellationToken cancellationToken)
+                                                                HttpCompletionOption completionOption,
+                                                                CancellationToken cancellationToken)
         {
             request.PrepareSend();
+            await request.PrepareSendAsync();
 
             var reqMsg = new HttpRequestMessage
             {
                 RequestUri = new Uri(request.address_url),
                 Method     = request.http_method
             };
-            
+
             PackageReqContent(reqMsg, request); //  配置内容
+
             request.OnSending(reqMsg);
+            await request.OnSendingAsync(reqMsg);
 
             return await client.SendAsync(reqMsg, completionOption, cancellationToken);
         }

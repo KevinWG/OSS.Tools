@@ -13,6 +13,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace OSS.Tools.Http
 {
@@ -52,10 +53,11 @@ namespace OSS.Tools.Http
         /// eg:当上传文件时，无法自定义内容
         /// </summary>
         public string custom_body { get; set; }
-        
+
         /// <summary>
         /// 准备发送执行
         /// </summary>
+        [Obsolete]
         protected internal virtual void PrepareSend() //(HttpRequestMessage httpRequestMessage)
         {
         }
@@ -63,10 +65,28 @@ namespace OSS.Tools.Http
         /// <summary>
         /// 发送执行
         /// </summary>
+        [Obsolete]
         protected internal virtual void OnSending(HttpRequestMessage httpRequestMessage) //(HttpRequestMessage httpRequestMessage)
         {
         }
-        
+
+
+        /// <summary>
+        /// 准备发送执行
+        /// </summary>
+        protected internal virtual Task PrepareSendAsync() //(HttpRequestMessage httpRequestMessage)
+        {
+            return Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// 发送执行
+        /// </summary>
+        protected internal virtual Task OnSendingAsync(HttpRequestMessage httpRequestMessage) //(HttpRequestMessage httpRequestMessage)
+        {
+            return Task.CompletedTask;
+        }
+
 
 
         #region   请求的内容参数
