@@ -116,12 +116,10 @@ namespace OSS.Tools.Http
             {
                 resStr = await resp .Content.ReadAsStringAsync();
             }
-
             if (disposeResponse)
             {
                 resp.Dispose();
             }
-
             return resStr;
         }
 
