@@ -60,7 +60,7 @@ namespace OSS.Tools.DirConfig
         /// <typeparam name="TConfig"></typeparam>
         /// <returns></returns>
         public static Task<bool> SetDirConfig<TConfig>(string key, TConfig dirConfig,
-            string sourceName = "") where TConfig : class, new()
+            string sourceName = "")
         {
             return GetDirConfig(sourceName).SetDirConfig(key, dirConfig,sourceName);
         }
@@ -74,7 +74,6 @@ namespace OSS.Tools.DirConfig
         /// <param name="sourceName">来源名称</param>
         /// <returns></returns>
         public static Task<TConfig> GetDirConfig<TConfig>(string key, string sourceName = "")
-            where TConfig : class, new()
         {
             return GetDirConfig(sourceName).GetDirConfig<TConfig>(key, sourceName);
         }
