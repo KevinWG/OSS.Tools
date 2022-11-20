@@ -155,6 +155,11 @@ namespace OSS.Tools.DirConfig
             return _dirConfig.GetDirConfig<List<ItemConfig<TConfig>>>(listKey, sourceName);
         }
 
+        public async Task<int> GetCount(string listKey, string sourceName)
+        {
+            return (await _dirConfig.GetDirConfig<List<ItemConfig>>(listKey, sourceName))?.Count ?? 0;
+        }
+
         public async Task<ItemConfig<TConfig>> GetItem<TConfig>(string listKey, string itemKey, string sourceName)
         {
             var configs =await _dirConfig.GetDirConfig<List<ItemConfig<TConfig>>>(listKey, sourceName);

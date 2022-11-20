@@ -73,6 +73,14 @@ namespace OSS.Tools.DirConfig
         Task<List<ItemConfig<TConfig>>> GetList<TConfig>(string listKey, string sourceName);
 
         /// <summary>
+        /// 获取列表数量
+        /// </summary>
+        /// <param name="listKey">配置关键字</param>
+        /// <param name="sourceName">来源名称</param>
+        /// <returns></returns>
+        Task<int> GetCount(string listKey, string sourceName);
+
+        /// <summary>
         /// 获取列表配置具体项
         /// </summary>
         /// <param name="listKey">配置关键字</param>

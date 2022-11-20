@@ -156,6 +156,18 @@ namespace OSS.Tools.DirConfig
             return GetDirConfig(sourceName).GetList<TConfig>(listKey, sourceName);
         }
 
+
+        /// <summary>
+        /// 获取列表数量
+        /// </summary>
+        /// <param name="listKey">配置关键字</param>
+        /// <param name="sourceName">来源名称</param>
+        /// <returns></returns>
+        public static Task<int> GetCount(string listKey, string sourceName)
+        {
+            return GetDirConfig(sourceName).GetCount(listKey, sourceName);
+        }
+
         /// <summary>
         /// 获取列表配置具体项
         /// </summary>
