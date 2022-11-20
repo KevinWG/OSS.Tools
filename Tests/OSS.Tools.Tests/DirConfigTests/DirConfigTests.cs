@@ -15,11 +15,11 @@ namespace OSS.Tools.Tests.DirConfigTests
         public async Task DirConfigTest()
         {
             var config = new ConfigTest() {Name = "ConfigTest"};
-            await DirConfigHelper.SetDirConfig("Test_Config", config);
+            await ListConfigHelper.SetItem("Test_Config","item", config);
 
-            var rConfig = await DirConfigHelper.GetDirConfig<ConfigTest>("Test_Config");
+            var rConfig = await ListConfigHelper.GetList<ConfigTest>("Test_Config");
 
-            Assert.True(rConfig?.Name == "ConfigTest");
+            Assert.True(rConfig[0]?.value.Name == "ConfigTest");
             await DirConfigHelper.RemoveDirConfig("Test_Config");
         }
     }

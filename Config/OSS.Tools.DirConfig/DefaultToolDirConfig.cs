@@ -12,7 +12,9 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
@@ -93,7 +95,7 @@ namespace OSS.Tools.DirConfig
                 var fileFullName = string.Concat(_defaultPath, Path.DirectorySeparatorChar, key, ".config");
 
                 if (!File.Exists(fileFullName))
-                    return null;
+                    return Task.FromResult(default(TConfig));
 
                 fs = new FileStream(fileFullName, FileMode.Open, FileAccess.Read, FileShare.Read);
 
@@ -119,6 +121,56 @@ namespace OSS.Tools.DirConfig
                 File.Delete(fileName); 
             }
             return Task.CompletedTask;
+        }
+    }
+
+
+    public class DefaultToolListConfig : IToolListConfig
+    {
+        private static readonly DefaultToolDirConfig _dirConfig = new DefaultToolDirConfig();
+
+        public async Task<bool> SetItem<TConfig>(string listKey, string itemKey, TConfig itemValue, string sourceName)
+        {
+            var configRes = await _dirConfig.GetDirConfig<List<ItemConfig<TConfig>>>(listKey, sourceName);
+
+            ItemConfig<TConfig> item;
+            if (configRes != null && (item = configRes.FirstOrDefault(c => c.key == itemKey)) != null)
+            {
+                item.value = itemValue;
+            }
+            else
+            {
+                if (configRes == null)
+                    configRes = new List<ItemConfig<TConfig>>();
+
+                configRes.Add(new ItemConfig<TConfig>() {key = itemKey, value = itemValue});
+            }
+
+            return await _dirConfig.SetDirConfig(listKey, configRes, sourceName);
+        }
+
+  
+        public Task<List<ItemConfig<TConfig>>> GetList<TConfig>(string listKey, string sourceName)
+        {
+            return _dirConfig.GetDirConfig<List<ItemConfig<TConfig>>>(listKey, sourceName);
+        }
+
+        public async Task<ItemConfig<TConfig>> GetItem<TConfig>(string listKey, string itemKey, string sourceName)
+        {
+            var configs =await _dirConfig.GetDirConfig<List<ItemConfig<TConfig>>>(listKey, sourceName);
+            return configs?.FirstOrDefault(i => i.key == itemKey);
+        }
+
+        public async Task RemoveItem(string listKey, string itemKey, string sourceName)
+        {
+            var configRes = await _dirConfig.GetDirConfig<List<ItemConfig>>(listKey, sourceName);
+
+            ItemConfig item;
+            if (configRes != null && (item = configRes.FirstOrDefault(c => c.key == itemKey)) != null)
+            {
+                configRes.Remove(item); 
+                await _dirConfig.SetDirConfig(listKey, configRes, sourceName);
+            }
         }
     }
 }
