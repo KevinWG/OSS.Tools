@@ -31,7 +31,7 @@ namespace OSS.Tools.DirConfig
         /// <summary>
         ///   配置信息来源提供者
         /// </summary>
-        public static Func<string, IToolDirConfig> DirToolProvider { get; set; }
+        public static Func<string, IToolDirConfig> ToolProvider { get; set; }
 
         /// <summary>
         /// 来源名称格式化
@@ -48,7 +48,7 @@ namespace OSS.Tools.DirConfig
             if (SourceFormat != null)
                 sourceName = SourceFormat.Invoke(sourceName);
 
-            return DirToolProvider?.Invoke(sourceName) ?? DefaultDirTool;
+            return ToolProvider?.Invoke(sourceName) ?? DefaultDirTool;
         }
 
 
@@ -108,7 +108,7 @@ namespace OSS.Tools.DirConfig
         /// <summary>
         ///   配置信息来源提供者
         /// </summary>
-        public static Func<string, IToolListConfig> DirToolProvider { get; set; }
+        public static Func<string, IToolListConfig> ToolProvider { get; set; }
 
         /// <summary>
         /// 来源名称格式化
@@ -125,7 +125,7 @@ namespace OSS.Tools.DirConfig
             if (SourceFormat != null)
                 sourceName = SourceFormat.Invoke(sourceName);
 
-            return DirToolProvider?.Invoke(sourceName) ?? DefaultDirTool;
+            return ToolProvider?.Invoke(sourceName) ?? DefaultDirTool;
         }
 
 
