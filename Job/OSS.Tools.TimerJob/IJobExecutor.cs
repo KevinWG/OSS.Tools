@@ -1,8 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace OSS.Tools.TimerJob
+﻿namespace OSS.Tools.TimerJob
 {
     /// <summary>
     ///  任务 提供者 接口
@@ -30,11 +26,29 @@ namespace OSS.Tools.TimerJob
         Task StopAsync(CancellationToken cancellationToken);
     }
 
+    /// <summary>
+    ///  状态标识
+    /// </summary>
     public enum StatusFlag
     {
+        /// <summary>
+        ///  等待执行
+        /// </summary>
         Waiting,
+
+        /// <summary>
+        ///  执行中
+        /// </summary>
         Running,
+
+        /// <summary>
+        ///  正在结束
+        /// </summary>
         Stopping,
+
+        /// <summary>
+        ///  已结束
+        /// </summary>
         Stopped
     }
 
@@ -51,12 +65,12 @@ namespace OSS.Tools.TimerJob
             _stopAction = stopAction;
         }
             
-        protected override Task OnStarted(CancellationToken cancellationToken)
+        protected override Task OnStarting(CancellationToken cancellationToken)
         {
             return _startAction?.Invoke(cancellationToken) ?? Task.CompletedTask;
         }
 
-        protected override Task OnStoped(CancellationToken cancellationToken)
+        protected override Task OnStopping(CancellationToken cancellationToken)
         {
             return _stopAction?.Invoke(cancellationToken) ?? Task.CompletedTask;
         }

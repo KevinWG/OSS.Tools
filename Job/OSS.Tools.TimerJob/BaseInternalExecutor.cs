@@ -1,21 +1,24 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-
-namespace OSS.Tools.TimerJob
-{ 
+﻿namespace OSS.Tools.TimerJob
+{
     /// <summary>
     /// 任务基类
     ///       如果执行时间过长，重复触发时 当前任务还在进行中，则不做任何处理
     /// </summary>
-    public abstract class BaseInternalExecutor : IJobExecutor
+    public abstract class Internal_BaseExecutor : IJobExecutor
     {
         private bool _isRunning = false;
         private bool _jobCommandStarted = false;
 
         /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="jobName"></param>
+        protected Internal_BaseExecutor(string jobName) => JobName = jobName;
+
+        /// <summary>
         /// 任务名称
         /// </summary>
-        public string JobName { get; protected set; }
+        public string JobName { get; protected set; } 
 
         /// <summary>
         ///  运行状态
@@ -75,7 +78,7 @@ namespace OSS.Tools.TimerJob
         public Task StopAsync(CancellationToken cancellationToken)
         {
             _jobCommandStarted = false;
-            return OnStoped(cancellationToken);
+            return OnStopping(cancellationToken);
         }
 
 
@@ -84,7 +87,7 @@ namespace OSS.Tools.TimerJob
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        protected virtual Task OnStoped(CancellationToken cancellationToken)
+        protected virtual Task OnStopping(CancellationToken cancellationToken)
         {
             return Task.CompletedTask;
         }

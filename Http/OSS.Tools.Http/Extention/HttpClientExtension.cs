@@ -10,14 +10,8 @@
 
 #endregion
 
-using System;
-using System.IO;
-using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace OSS.Tools.Http
 {
@@ -42,7 +36,7 @@ namespace OSS.Tools.Http
         /// <param name="client"></param>
         /// <param name="request"></param>
         /// <returns></returns>
-        public static Task<HttpResponseMessage> SendAsync(this HttpClient client, OssHttpRequest request)
+        public static Task<HttpResponseMessage> SendAsync(this HttpClient? client, OssHttpRequest request)
         {
             return SendAsync(client, request, HttpCompletionOption.ResponseContentRead, CancellationToken.None);
         }
@@ -54,7 +48,7 @@ namespace OSS.Tools.Http
         /// <param name="request"></param>
         /// <param name="completionOption"></param>
         /// <returns></returns>
-        public static Task<HttpResponseMessage> SendAsync(this HttpClient client, OssHttpRequest request,
+        public static Task<HttpResponseMessage> SendAsync(this HttpClient? client, OssHttpRequest request,
             HttpCompletionOption completionOption)
         {
            return SendAsync(client, request, completionOption, CancellationToken.None);
@@ -69,7 +63,7 @@ namespace OSS.Tools.Http
         /// <param name="completionOption"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public static async Task<HttpResponseMessage> SendAsync(this HttpClient client, OssHttpRequest request,
+        public static async Task<HttpResponseMessage> SendAsync(this HttpClient? client, OssHttpRequest request,
                                                                 HttpCompletionOption completionOption,
                                                                 CancellationToken cancellationToken)
         {
@@ -189,15 +183,17 @@ namespace OSS.Tools.Http
                     WriteStringTo(memory, GetMultipartFormData(param, boundary));
                 }
             }
-            
-            foreach (var file in request.file_paras)
-            {
-                //文件头
-                WriteStringTo(memory, GetMultipartFileHeader(file, boundary));
-                //文件内容
-                file.Writer(memory);
-                //文件结尾
-                WriteStringTo(memory, _lineBreak);
+
+            if (request.file_paras != null){
+                foreach (var file in request.file_paras)
+                {
+                    //文件头
+                    WriteStringTo(memory, GetMultipartFileHeader(file, boundary));
+                    //文件内容
+                    file.Writer(memory);
+                    //文件结尾
+                    WriteStringTo(memory, _lineBreak);
+                }
             }
             //写入整个请求的底部信息
             WriteStringTo(memory, GetMultipartFooter(boundary));
@@ -246,25 +242,25 @@ namespace OSS.Tools.Http
         /// <returns></returns>
         private static string GetNormalFormData(OssHttpRequest request)
         {
-            var formstring = new StringBuilder();
+            var formString = new StringBuilder();
             if (request.form_paras != null)
             {
                 foreach (var p in request.form_paras)
                 {
-                    if (formstring.Length > 1)
-                        formstring.Append("&");
-                    formstring.AppendFormat(p.ToString());
+                    if (formString.Length > 1)
+                        formString.Append("&");
+                    formString.AppendFormat(p.ToString());
                 }
             }
          
             if (string.IsNullOrEmpty(request.custom_body))
-                return formstring.ToString();
+                return formString.ToString();
 
-            if (formstring.Length > 1)
-                formstring.Append("&");
+            if (formString.Length > 1)
+                formString.Append("&");
 
-            formstring.Append(request.custom_body);
-            return formstring.ToString();
+            formString.Append(request.custom_body);
+            return formString.ToString();
         }
         #endregion
 
@@ -272,7 +268,7 @@ namespace OSS.Tools.Http
 
         #region 请求辅助方法
         /// <summary>
-        /// 写入数据方法（将数据写入  webrequest）
+        /// 写入数据方法（将数据写入 request）
         /// </summary>
         /// <param name="stream"></param>
         /// <param name="toWrite"></param>

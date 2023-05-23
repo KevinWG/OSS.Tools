@@ -11,8 +11,6 @@
 
 #endregion
 
-using System;
-using System.Threading.Tasks;
 
 namespace OSS.Tools.Cache
 {
@@ -26,12 +24,12 @@ namespace OSS.Tools.Cache
         /// <summary>
         /// 缓存来源提供者
         /// </summary>
-        public static Func<string, IToolCache> CacheToolProvider { get; set; }
+        public static Func<string, IToolCache>? CacheToolProvider { get; set; }
 
         /// <summary>
         /// 来源名称格式化
         /// </summary>
-        public static Func<string, string> SourceFormat { get; set; }
+        public static Func<string, string>? SourceFormat { get; set; }
 
         /// <summary>
         /// 通过来源名称获取
@@ -141,7 +139,7 @@ namespace OSS.Tools.Cache
         /// <param name="sourceName">来源名称</param>
         /// <returns></returns>
         public static Task<RType> GetOrSetAsync<RType>(string cacheKey, Func<Task<RType>> getFunc,TimeSpan slidingExpiration,
-            Func<RType, bool> beforeSettingChecker, int hitProtectedSeconds = 10, 
+            Func<RType, bool>? beforeSettingChecker, int hitProtectedSeconds = 10, 
             string sourceName = "")
         {
             return GetOrSetAsync(cacheKey, getFunc,new CacheTimeOptions(){sliding_expiration = slidingExpiration}, beforeSettingChecker, hitProtectedSeconds, sourceName);
@@ -177,7 +175,7 @@ namespace OSS.Tools.Cache
         /// <param name="sourceName">来源名称</param>
         /// <returns></returns>
         public static Task<RType> GetOrSetAbsoluteAsync<RType>(string cacheKey, Func<Task<RType>> getFunc,TimeSpan absoluteExpiration,
-            Func<RType, bool> beforeSettingChecker, int hitProtectedSeconds = 10,string sourceName = "")
+            Func<RType, bool>? beforeSettingChecker, int hitProtectedSeconds = 10,string sourceName = "")
         {
             return GetOrSetAsync(cacheKey, getFunc, new CacheTimeOptions(){absolute_expiration_relative_to_now = absoluteExpiration}, beforeSettingChecker, hitProtectedSeconds, sourceName);
         }
@@ -196,7 +194,7 @@ namespace OSS.Tools.Cache
         /// <param name="sourceName">来源名称</param>
         /// <returns></returns>
         public static async Task<RType> GetOrSetAsync<RType>(string cacheKey, Func<Task<RType>> getFunc, CacheTimeOptions cacheTimeOpt,
-            Func<RType, bool> beforeSettingChecker = null, int hitProtectedSeconds = 10, string sourceName = "")
+            Func<RType, bool>? beforeSettingChecker = null, int hitProtectedSeconds = 10, string sourceName = "")
         {
             if (getFunc == null)
                 throw new ArgumentNullException("获取原始数据方法(getFunc)不能为空!");

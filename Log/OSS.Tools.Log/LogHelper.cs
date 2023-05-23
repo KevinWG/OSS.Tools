@@ -23,29 +23,29 @@ namespace OSS.Tools.Log
         /// <summary>
         ///  默认日志工具
         /// </summary>
-        public static IToolLog DefaultLogTool { get; set; }= new DefaultToolLog();
+        private static readonly IToolLog _defaultLogTool = new DefaultToolLog();
 
-        
         /// <summary>
         ///   日志工具提供者
         /// </summary>
-        public static Func<string, IToolLog> LogToolProvider { get; set; }
+        public static Func<string, IToolLog>? LogToolProvider { get; set; }
 
         /// <summary>
         ///  对日志内容格式化
         ///     例如可以 初始化日志Id，加工日志内容 等
         /// </summary>
-        public static Action<LogInfo> LogFormat { get; set; }
+        public static Action<LogInfo>? LogFormat { get; set; }
 
         /// <summary>
         /// 通过来源名称获取日志来源实例
         /// </summary>
-        /// <param name="logModule"></param>
+        /// <param name="sourceName"></param>
         /// <returns></returns>
-        public static IToolLog GetLogWrite(string logModule)
+        public static IToolLog GetLogWriter(string sourceName)
         {
-            return LogToolProvider?.Invoke(logModule) ?? DefaultLogTool;
+            return LogToolProvider?.Invoke(sourceName) ?? _defaultLogTool;
         }
+
 
         /// <summary>
         /// 记录信息
@@ -99,11 +99,8 @@ namespace OSS.Tools.Log
         {
             try
             {
-                if (string.IsNullOrEmpty(info.source_name))
-                    info.source_name = "";
-
                 LogFormat?.Invoke(info);
-                GetLogWrite(info.source_name)?.WriteLogAsync(info);
+                GetLogWriter(info.source_name)?.WriteLogAsync(info);
             }
             catch
             {

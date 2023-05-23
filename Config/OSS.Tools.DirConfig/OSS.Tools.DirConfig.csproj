@@ -1,15 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>2.3.3</Version>
-    <PackageReleaseNotes>优化扩展</PackageReleaseNotes>
-    <PackageIconUrl>http://img1.osscore.cn/static/oss_net.png</PackageIconUrl>
-    <PackageProjectUrl>https://github.com/KevinWG/OSS.Tools</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/KevinWG/OSS.Tools</RepositoryUrl>
-    <Authors>OSSCore</Authors>
-    <Company>OSSCore</Company>
-    <Description>字典配置管理</Description>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<Version>3.0</Version>
+		<PackageReleaseNotes>优化扩展</PackageReleaseNotes>
+		<PackageIconUrl>http://img1.osscore.cn/static/oss_net.png</PackageIconUrl>
+		<PackageProjectUrl>https://github.com/KevinWG/OSS.Tools</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/KevinWG/OSS.Tools</RepositoryUrl>
+		<Authors>OSSCore</Authors>
+		<Company>OSSCore</Company>
+		<Description>字典配置管理</Description>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+	</PropertyGroup>
 
 </Project>

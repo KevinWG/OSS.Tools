@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-
-namespace OSS.Tools.Cache
+﻿namespace OSS.Tools.Cache
 {
     /// <summary>
     ///    缓存委托方法扩展处理
@@ -38,7 +35,7 @@ namespace OSS.Tools.Cache
         /// <param name="sourceName">来源名称</param>
         /// <returns></returns>
         public static Task<RType> WithCacheAsync<RType>(this Func<Task<RType>> getFunc, string cacheKey, TimeSpan slidingExpiration,
-            Func<RType, bool> beforeSettingChecker, int hitProtectedSeconds = 10,
+            Func<RType, bool>? beforeSettingChecker, int hitProtectedSeconds = 10,
             string sourceName = "")
         {
             return CacheHelper.GetOrSetAsync(cacheKey, getFunc, new CacheTimeOptions() { sliding_expiration = slidingExpiration }, beforeSettingChecker, hitProtectedSeconds, sourceName);
@@ -74,7 +71,7 @@ namespace OSS.Tools.Cache
         /// <param name="sourceName">来源名称</param>
         /// <returns></returns>
         public static Task<RType> WithAbsoluteCacheAsync<RType>(this Func<Task<RType>> getFunc, string cacheKey, TimeSpan absoluteExpiration,
-            Func<RType, bool> beforeSettingChecker, int hitProtectedSeconds = 10, string sourceName = "")
+            Func<RType, bool>? beforeSettingChecker, int hitProtectedSeconds = 10, string sourceName = "")
         {
             return CacheHelper.GetOrSetAsync(cacheKey, getFunc,
                 new CacheTimeOptions()
@@ -98,7 +95,7 @@ namespace OSS.Tools.Cache
         /// <param name="sourceName">来源名称</param>
         /// <returns></returns>
         public static Task<RType> WithCacheAsync<RType>(this Func<Task<RType>> getFunc, string cacheKey, CacheTimeOptions cacheTimeOpt,
-            Func<RType, bool> beforeSettingChecker = null, int hitProtectedSeconds = 10, string sourceName = "")
+            Func<RType, bool>? beforeSettingChecker = null, int hitProtectedSeconds = 10, string sourceName = "")
         {
             return CacheHelper.GetOrSetAsync(cacheKey, getFunc, cacheTimeOpt, beforeSettingChecker, hitProtectedSeconds, sourceName);
         }

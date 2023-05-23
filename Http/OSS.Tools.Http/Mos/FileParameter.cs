@@ -10,8 +10,6 @@
 
 #endregion
 
-using System;
-using System.IO;
 
 namespace OSS.Tools.Http
 {

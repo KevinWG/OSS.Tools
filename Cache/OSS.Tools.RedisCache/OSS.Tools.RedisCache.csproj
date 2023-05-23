@@ -1,29 +1,28 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.3.1</Version>
-    <PackageReleaseNotes></PackageReleaseNotes>
-    <PackageProjectUrl>https://github.com/KevinWG/OSS.Tools</PackageProjectUrl>
-    <PackageIconUrl>http://img1.osscore.cn/static/oss_net.png</PackageIconUrl>
-    <RepositoryUrl>https://github.com/KevinWG/OSS.Tools</RepositoryUrl>
-    <Authors>OSSCore</Authors>
-    <Company>OSSCore</Company>
-    <Description>Redis Cache 操作工具类库</Description>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<Version>2.0</Version>
+		<PackageReleaseNotes></PackageReleaseNotes>
+		<PackageProjectUrl>https://github.com/KevinWG/OSS.Tools</PackageProjectUrl>
+		<PackageIconUrl>http://img1.osscore.cn/static/oss_net.png</PackageIconUrl>
+		<RepositoryUrl>https://github.com/KevinWG/OSS.Tools</RepositoryUrl>
+		<Authors>OSSCore</Authors>
+		<Company>OSSCore</Company>
+		<Description>Redis Cache 操作工具类库</Description>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\netstandard2.0\OSS.Tools.RedisCache.xml</DocumentationFile>
-    <OutputPath>bin\Release\netstandard2.0\</OutputPath>
-  </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="5.0.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="7.0.5" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\OSS.Tools.Cache\OSS.Tools.Cache.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\OSS.Tools.Cache\OSS.Tools.Cache.csproj" />
+	</ItemGroup>
 
 </Project>

@@ -13,11 +13,6 @@
 
 #endregion
 
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace OSS.Tools.Http
 {
@@ -34,7 +29,7 @@ namespace OSS.Tools.Http
         /// <param name="request">请求的参数</param>
         /// <param name="clientSourceName">如果设置 HttpClientHelper.HttpClientFactory,会在 CreateClient 时传入</param>
         /// <returns>自定义的Response结果</returns>
-        public static Task<HttpResponseMessage> SendAsync(this OssHttpRequest request, string clientSourceName=null)
+        public static Task<HttpResponseMessage> SendAsync(this OssHttpRequest request, string? clientSourceName=null)
         {
             return SendAsync(request, HttpCompletionOption.ResponseContentRead, CancellationToken.None, clientSourceName);
         }
@@ -47,7 +42,7 @@ namespace OSS.Tools.Http
         /// <param name="clientSourceName">如果设置 HttpClientHelper.HttpClientFactory,会在 CreateClient 时传入</param>
         /// <returns>自定义的Response结果</returns>
         public static Task<HttpResponseMessage> SendAsync(this OssHttpRequest request,
-            HttpCompletionOption completionOption, string clientSourceName = null)
+            HttpCompletionOption completionOption, string? clientSourceName = null)
         {
             return SendAsync(request, completionOption, CancellationToken.None, clientSourceName);
         }
@@ -61,7 +56,7 @@ namespace OSS.Tools.Http
         /// <param name="clientSourceName">如果设置 HttpClientHelper.HttpClientFactory,会在 CreateClient 时传入</param>
         /// <returns>自定义的Response结果</returns>
         public static Task<HttpResponseMessage> SendAsync(this OssHttpRequest request, HttpCompletionOption completionOption,
-            CancellationToken token, string clientSourceName = null)
+            CancellationToken token, string? clientSourceName = null)
         {
             return HttpClientHelper.CreateClient(clientSourceName).SendAsync(request, completionOption, token);
         }
@@ -75,7 +70,7 @@ namespace OSS.Tools.Http
         /// <param name="body"></param>
         /// <param name="clientSourceName">如果设置 HttpClientHelper.HttpClientFactory,会在 CreateClient 时传入</param>
         /// <returns></returns>
-        public static Task<HttpResponseMessage> PostAsync(this OssHttpRequest request,string body, string clientSourceName = null)
+        public static Task<HttpResponseMessage> PostAsync(this OssHttpRequest request,string body, string? clientSourceName = null)
         { 
             request.http_method = HttpMethod.Post;
             request.custom_body = body;
@@ -90,7 +85,7 @@ namespace OSS.Tools.Http
         /// <param name="request"></param>
         /// <param name="clientSourceName">如果设置 HttpClientHelper.HttpClientFactory,会在 CreateClient 时传入</param>
         /// <returns></returns>
-        public static Task<HttpResponseMessage> GetAsync(this OssHttpRequest request, string clientSourceName = null)
+        public static Task<HttpResponseMessage> GetAsync(this OssHttpRequest request, string? clientSourceName = null)
         {
             request.http_method = HttpMethod.Get;
 

@@ -10,10 +10,6 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace OSS.Tools.Http
 {
@@ -41,7 +37,7 @@ namespace OSS.Tools.Http
         /// <summary>
         ///  如果此值设置
         /// </summary>
-        public string address_url { get; set; }
+        public string address_url { get; set; } = string.Empty;
 
         /// <summary>
         /// 请求方式
@@ -52,12 +48,12 @@ namespace OSS.Tools.Http
         /// 自定义内容实体
         /// eg:当上传文件时，无法自定义内容
         /// </summary>
-        public string custom_body { get; set; }
+        public string? custom_body { get; set; }
 
         /// <summary>
         /// 准备发送执行
         /// </summary>
-        [Obsolete]
+        [Obsolete("请使用 PrepareSendAsync() 方法代替, 3.0 版本之后不再支持")]
         protected internal virtual void PrepareSend() //(HttpRequestMessage httpRequestMessage)
         {
         }
@@ -65,7 +61,7 @@ namespace OSS.Tools.Http
         /// <summary>
         /// 发送执行
         /// </summary>
-        [Obsolete]
+        [Obsolete("请使用 OnSendingAsync() 方法代替, 3.0 版本之后不再支持")]
         protected internal virtual void OnSending(HttpRequestMessage httpRequestMessage) //(HttpRequestMessage httpRequestMessage)
         {
         }
@@ -91,18 +87,18 @@ namespace OSS.Tools.Http
 
         #region   请求的内容参数
 
-        internal List<FileParameter> FileParameters;
-        internal List<NameValuePair> FormParameters;
+        internal List<FileParameter>? FileParameters;
+        internal List<NameValuePair>? FormParameters;
         
         /// <summary>
         /// 文件参数列表
         /// </summary>
-        public IReadOnlyList<FileParameter> file_paras => FileParameters;
+        public IReadOnlyList<FileParameter>? file_paras => FileParameters;
         
         /// <summary>
         /// 非文件参数列表
         /// </summary>
-        public IReadOnlyList<NameValuePair> form_paras => FormParameters; // 兼容老版本，取值时默认赋值
+        public IReadOnlyList<NameValuePair>? form_paras => FormParameters; // 兼容老版本，取值时默认赋值
 
         #endregion
     }
@@ -116,11 +112,9 @@ namespace OSS.Tools.Http
         /// <param name="file"></param>
         public static OssHttpRequest AddFilePara(this OssHttpRequest req,FileParameter file)
         {
-            if (req.FileParameters == null)
-            {
-                req.FileParameters = new List<FileParameter>();
-            }
+            req.FileParameters ??= new List<FileParameter>();
             req.FileParameters.Add(file);
+
             return req;
         }
 
@@ -132,11 +126,9 @@ namespace OSS.Tools.Http
         /// <param name="value"></param>
         public static OssHttpRequest AddFormPara(this OssHttpRequest req, string name, object value)
         {
-            if (req.FormParameters == null)
-            {
-                req.FormParameters = new List<NameValuePair>();
-            }
+            req.FormParameters ??= new List<NameValuePair>();
             req.FormParameters.Add(new NameValuePair(name, value));
+
             return req;
         }
     }

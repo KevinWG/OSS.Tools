@@ -11,12 +11,11 @@
 
 #endregion
 
-using OSS.Tools.Cache;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Newtonsoft.Json;
+using OSS.Tools.Cache;
+using System.Text;
 
 namespace OSS.Tools.RedisCache
 {
@@ -64,7 +63,7 @@ namespace OSS.Tools.RedisCache
         /// <typeparam name="T"></typeparam>
         /// <param name="key"></param>
         /// <returns></returns>
-        public async Task<T> GetAsync<T>(string key)
+        public async Task<T?> GetAsync<T>(string key)
         {
             var bytes = await _cache.GetAsync(key);
             var text  = Encoding.UTF8.GetString(bytes);

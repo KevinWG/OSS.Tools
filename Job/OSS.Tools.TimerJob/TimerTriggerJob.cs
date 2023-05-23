@@ -1,8 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace OSS.Tools.TimerJob
+﻿namespace OSS.Tools.TimerJob
 {
     /// <summary>
     ///   定时器基础类
@@ -78,12 +74,12 @@ namespace OSS.Tools.TimerJob
 
         #endregion
         
-        protected override Task OnStarted(CancellationToken cancellationToken)
+        protected override Task OnStarting(CancellationToken cancellationToken)
         {
             return StartTimerTrigger(cancellationToken);
         }
 
-        protected override Task OnStoped(CancellationToken cancellationToken)
+        protected override Task OnStopping(CancellationToken cancellationToken)
         {
             return StopTimerTrigger(cancellationToken);
         }

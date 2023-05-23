@@ -12,7 +12,6 @@
 #endregion
 
 using Microsoft.Extensions.Caching.Memory;
-using System;
 
 namespace OSS.Tools.Cache
 {
@@ -21,18 +20,13 @@ namespace OSS.Tools.Cache
     /// </summary>
     public class CacheTimeOptions
     {
-        private DateTimeOffset? _absoluteExpiration;
         private TimeSpan?       _absoluteExpirationRelativeToNow;
         private TimeSpan?       _slidingExpiration;
 
         /// <summary>
         ///  绝对过期时间
         /// </summary>
-        public DateTimeOffset? absolute_expiration
-        {
-            get => this._absoluteExpiration;
-            set => this._absoluteExpiration = value;
-        }
+        public DateTimeOffset? absolute_expiration { get; set; }
 
         /// <summary>
         ///  固定过期时间间隔
@@ -42,9 +36,8 @@ namespace OSS.Tools.Cache
             get => this._absoluteExpirationRelativeToNow;
             set
             {
-                TimeSpan? nullable = value;
-                TimeSpan  zero     = TimeSpan.Zero;
-                if ((nullable.HasValue ? (nullable.GetValueOrDefault() <= zero ? 1 : 0) : 0) != 0)
+                var  zero     = TimeSpan.Zero;
+                if ((value.HasValue ? (value.GetValueOrDefault() <= zero ? 1 : 0) : 0) != 0)
                     throw new ArgumentOutOfRangeException(nameof(absolute_expiration_relative_to_now),  value,
                         "The relative expiration value must be positive.");
                 this._absoluteExpirationRelativeToNow = value;
@@ -56,14 +49,13 @@ namespace OSS.Tools.Cache
         /// </summary>
         public TimeSpan? sliding_expiration
         {
-            get => this._slidingExpiration;
+            get => _slidingExpiration;
             set
             {
-                TimeSpan? nullable = value;
-                TimeSpan  zero     = TimeSpan.Zero;
-                if ((nullable.HasValue ? (nullable.GetValueOrDefault() <= zero ? 1 : 0) : 0) != 0)
+                var  zero     = TimeSpan.Zero;
+                if ((value.HasValue ? (value.GetValueOrDefault() <= zero ? 1 : 0) : 0) != 0)
                     throw new ArgumentOutOfRangeException(nameof(sliding_expiration), value, "The sliding expiration value must be positive.");
-                this._slidingExpiration = value;
+                _slidingExpiration = value;
             }
         }
     }

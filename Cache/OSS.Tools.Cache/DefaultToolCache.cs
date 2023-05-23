@@ -11,8 +11,6 @@
 
 #endregion
 
-using System;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace OSS.Tools.Cache
@@ -22,7 +20,7 @@ namespace OSS.Tools.Cache
     /// </summary>
     public class DefaultToolCache : IToolCache
     {
-        private static readonly MemoryCache _cache=new MemoryCache(new MemoryCacheOptions());
+        private static readonly MemoryCache _cache=new(new MemoryCacheOptions());
 
         /// <summary>
         ///  添加缓存,如果存在则更新为新值
@@ -47,7 +45,7 @@ namespace OSS.Tools.Cache
         /// <typeparam name="T">获取缓存对象类型</typeparam>
         /// <param name="key">key</param>
         /// <returns>获取指定key对应的值 </returns>
-        public Task<T> GetAsync<T>(string key)
+        public Task<T?> GetAsync<T>(string key)
         {
             return Task.FromResult(_cache.Get<T>(key));
         }

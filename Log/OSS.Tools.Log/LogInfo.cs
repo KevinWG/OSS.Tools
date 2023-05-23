@@ -55,16 +55,17 @@ namespace OSS.Tools.Log
         /// <summary>
         /// 日志构造函数
         /// </summary>
-        /// <param name="loglevel"></param>
+        /// <param name="logLevel"></param>
         /// <param name="logMsg"></param>
         /// <param name="msgKey"></param>
         /// <param name="sourceName"></param>
-        internal LogInfo(LogLevelEnum loglevel, object logMsg, string msgKey = null, string sourceName = "")
+        internal LogInfo(LogLevelEnum logLevel, object logMsg, string msgKey = null, string sourceName = "")
         {
-            level = loglevel;
+            level    = logLevel;
+            msg_body = logMsg;
+            msg_key  = msgKey;
+
             source_name = sourceName;
-            this.msg_body = logMsg;
-            msg_key = msgKey;
         }
 
         /// <summary>
@@ -73,7 +74,7 @@ namespace OSS.Tools.Log
         public LogLevelEnum level { get; set; }
 
         /// <summary>
-        /// 日志类型
+        /// 日志来源名称
         /// </summary>
         public string source_name { get; set; }
 

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Net.Http;
-
-namespace OSS.Tools.Http
+﻿namespace OSS.Tools.Http
 {
     /// <summary>
     ///  HttpClient 辅助类
@@ -11,7 +8,7 @@ namespace OSS.Tools.Http
         /// <summary>
         ///  HttpClient 的工厂实例
         /// </summary>
-        public static IHttpClientFactory HttpClientFactory { get; set; }
+        public static IHttpClientFactory? HttpClientFactory { get; set; }
 
         /// <summary>
         /// 获取HttpClient请求
@@ -21,7 +18,7 @@ namespace OSS.Tools.Http
         /// 返回 HttpClientFactory 创建的对象， 
         /// 如果 HttpClientFactory 未初始化，则在固定时间间隔（五分钟）返回固定的HttpClient
         /// </returns>
-        internal static HttpClient CreateClient(string sourceName = null)
+        internal static HttpClient? CreateClient(string? sourceName = null)
         {
             if (HttpClientFactory != null)
             {
@@ -32,8 +29,8 @@ namespace OSS.Tools.Http
             return GetDefaultClient();
         }
 
-        private static HttpClient _client = null;
-        private static DateTime _lastTime = DateTime.Now;
+        private static HttpClient? _client;
+        private static DateTime    _lastTime = DateTime.Now;
    
         /// <summary>
         /// 配置请求处理类

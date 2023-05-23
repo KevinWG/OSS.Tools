@@ -11,14 +11,13 @@
 
 #endregion
 
-using System.Threading.Tasks;
 
 namespace OSS.Tools.Cache
 {
     /// <summary>
     /// 缓存插件接口
     /// </summary>
-    public interface IToolCache
+    public interface IToolCache//: IMemoryCache
     {
         /// <summary>
         /// 添加固定过期时间缓存,如果存在则更新
@@ -36,7 +35,7 @@ namespace OSS.Tools.Cache
         /// <typeparam name="T">获取缓存对象类型</typeparam>
         /// <param name="key">key</param>
         /// <returns>获取指定key对应的值 </returns>
-        Task<T> GetAsync<T>(string key);
+        Task<T?> GetAsync<T>(string key);
 
         /// <summary>
         /// 移除缓存对象
