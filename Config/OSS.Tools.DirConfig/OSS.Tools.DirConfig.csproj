@@ -4,7 +4,7 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Version>3.0</Version>
+		<Version>3.0.1</Version>
 		<PackageReleaseNotes>优化扩展</PackageReleaseNotes>
 		<PackageIconUrl>http://img1.osscore.cn/static/oss_net.png</PackageIconUrl>
 		<PackageProjectUrl>https://github.com/KevinWG/OSS.Tools</PackageProjectUrl>

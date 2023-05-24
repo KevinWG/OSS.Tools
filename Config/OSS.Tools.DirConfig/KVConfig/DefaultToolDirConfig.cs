@@ -103,7 +103,7 @@ namespace OSS.Tools.DirConfig
                 return _defaultPath;
             }
 
-            _defaultPath = Path.Combine(AppContext.BaseDirectory, "Configs");
+            _defaultPath = Path.Combine(AppContext.BaseDirectory, "ConfigFiles");
             if (!Directory.Exists(_defaultPath))
             {
                 Directory.CreateDirectory(_defaultPath);
