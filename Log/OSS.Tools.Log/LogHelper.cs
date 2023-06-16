@@ -11,7 +11,6 @@
 
 #endregion
 
-using System;
 
 namespace OSS.Tools.Log
 {
@@ -28,7 +27,7 @@ namespace OSS.Tools.Log
         /// <summary>
         ///   日志工具提供者
         /// </summary>
-        public static Func<string, IToolLog>? LogToolProvider { get; set; }
+        public static Func<string?, IToolLog>? LogToolProvider { get; set; }
 
         /// <summary>
         ///  对日志内容格式化
@@ -41,7 +40,7 @@ namespace OSS.Tools.Log
         /// </summary>
         /// <param name="sourceName"></param>
         /// <returns></returns>
-        public static IToolLog GetLogWriter(string sourceName)
+        public static IToolLog GetLogWriter(string? sourceName)
         {
             return LogToolProvider?.Invoke(sourceName) ?? _defaultLogTool;
         }
@@ -53,7 +52,7 @@ namespace OSS.Tools.Log
         /// <param name="msg"> 日志信息  </param>
         /// <param name="msgKey">  关键值  </param>
         /// <param name="sourceName"> 来源名称 </param>
-        public static string Info(object msg, string msgKey = null, string sourceName = "")
+        public static Task<string?> Info(object msg, string? msgKey = null, string? sourceName = "")
         {
             return Log(new LogInfo(LogLevelEnum.Info, msg, msgKey, sourceName));
         }
@@ -64,7 +63,7 @@ namespace OSS.Tools.Log
         /// <param name="msg"> 日志信息  </param>
         /// <param name="msgKey">  关键值  </param>
         /// <param name="sourceName">来源名称</param>
-        public static string Warning(object msg, string msgKey = null, string sourceName = "")
+        public static Task<string?> Warning(object msg, string? msgKey = null, string? sourceName = "")
         {
             return Log(new LogInfo(LogLevelEnum.Warning, msg, msgKey, sourceName));
         }
@@ -75,7 +74,7 @@ namespace OSS.Tools.Log
         /// <param name="msg"> 日志信息  </param>
         /// <param name="msgKey">  关键值  </param>
         /// <param name="sourceName">来源名称</param>
-        public static string Error(object msg, string msgKey = null, string sourceName = "")
+        public static Task<string?> Error(object msg, string? msgKey = null, string? sourceName = "")
         {
             return Log(new LogInfo(LogLevelEnum.Error, msg, msgKey, sourceName));
         }
@@ -86,7 +85,7 @@ namespace OSS.Tools.Log
         /// <param name="msg"> 日志信息  </param>
         /// <param name="msgKey">  关键值  </param>
         /// <param name="sourceName">来源名称</param>
-        public static string Trace(object msg, string msgKey = null, string sourceName = "")
+        public static Task<string?> Trace(object msg, string? msgKey = null, string? sourceName = "")
         {
             return Log(new LogInfo(LogLevelEnum.Trace, msg, msgKey, sourceName));
         }
@@ -95,12 +94,13 @@ namespace OSS.Tools.Log
         ///   记录日志
         /// </summary>
         /// <param name="info"></param>
-        private static string Log(LogInfo info)
+        private static async Task<string?> Log(LogInfo info)
         {
             try
             {
                 LogFormat?.Invoke(info);
-                GetLogWriter(info.source_name)?.WriteLogAsync(info);
+                
+                await GetLogWriter(info.source_name).WriteLogAsync(info);
             }
             catch
             {

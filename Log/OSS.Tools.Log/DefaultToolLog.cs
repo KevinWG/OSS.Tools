@@ -11,10 +11,8 @@
 
 #endregion
 
-using System;
-using System.IO;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 
 namespace OSS.Tools.Log
 {
@@ -23,66 +21,80 @@ namespace OSS.Tools.Log
     /// </summary>
     public class DefaultToolLog : IToolLog
     {
-        private readonly string _logBaseDirPath;
-
         /// <summary>
         /// 构造函数
         /// </summary>
         public DefaultToolLog()
         {
-            _logBaseDirPath = Path.Combine(Directory.GetCurrentDirectory(), "logs");
-
-            if (!Directory.Exists(_logBaseDirPath))
-                Directory.CreateDirectory(_logBaseDirPath);
         }
-
-        private string getLogFilePath(string module, LogLevelEnum level)
-        {
-            var date       = DateTime.Now;
-            var moduleName = string.IsNullOrEmpty(module) ? "default" : module;
-
-            var dirPath = Path.Combine(_logBaseDirPath, string.Concat(moduleName, "_", level),
-                DateTime.Now.ToString("yyyyMM")); //string.Format(@"{0}\{1}\{2}\",_logBaseDirPath, module, level);
-
-            if (!Directory.Exists(dirPath))
-                Directory.CreateDirectory(dirPath);
-
-            var fileName = string.Concat(date.ToString("yyyy-MM-dd-HH"), Math.Floor(DateTime.Now.Minute / 10M),
-                "0.txt");
-            return Path.Combine(dirPath, fileName);
-        }
-
-        private static readonly object obj = new object();
-
+        
         /// <summary>
         /// 写日志
         /// </summary>
         /// <param name="info"></param>
         public Task WriteLogAsync(LogInfo info)
         {
-            return Task.Run(() =>
-            {
-                try
-                {
-                    lock (obj)
-                    {
-                        var filePath = getLogFilePath(info.source_name, info.level);
+            _asyncBlock.Post(info);
+            return Task.CompletedTask;
+        }
 
-                        using (var sw =
-                            new StreamWriter(new FileStream(filePath, FileMode.Append, FileAccess.Write),
-                                Encoding.UTF8))
-                        {
-                            sw.WriteLine("{0:T}    Code:{1}    Key:{2}   Detail:{3}\r\n", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                                info.trace_no, info.msg_key, info.msg_body);
-                        }
+
+        private static readonly object _obj = new();
+        private static readonly ActionBlock<LogInfo> _asyncBlock = new((info) =>
+        {
+            try
+            {
+                var logTime = info.log_time > 0
+                    ? DateTimeOffset.FromUnixTimeSeconds(info.log_time).LocalDateTime
+                    : DateTime.Now;
+
+                lock (_obj)
+                {
+                    var filePath = getLogFilePath(info.source_name, info.level, logTime);
+                    using (var sw = new StreamWriter(new FileStream(filePath, FileMode.Append, FileAccess.Write),
+                               Encoding.UTF8))
+                    {
+                        sw.WriteLine("{0:T}    TraceNo:{1}    Key:{2}   Detail:{3}\r\n",
+                            logTime.ToString("yyyy-MM-dd HH:mm:ss"),
+                            info.trace_no, info.msg_key, info.msg_body);
                     }
                 }
-                catch 
-                {
-                    //  写日志本身不能再报异常，这里特殊处理
-                }
+            }
+            catch
+            {
+                //  写日志本身不能再报异常，这里特殊处理
+            }
+        });
 
-            });
+        private static string getLogFilePath(string? sourceName, LogLevelEnum level, DateTime logTime)
+        {
+            var moduleName = string.IsNullOrEmpty(sourceName) ? "default" : sourceName;
+
+            var dirPath = Path.Combine(GetBaseDirPath(), string.Concat(moduleName, "_", level), logTime.ToString("yyyyMM"));
+
+            if (!Directory.Exists(dirPath))
+                Directory.CreateDirectory(dirPath);
+
+            var fileName = string.Concat(logTime.ToString("yyyy-MM-dd-HH-"), Math.Floor(logTime.Minute / 10M), "0.txt");
+            return Path.Combine(dirPath, fileName);
         }
+
+        private static string _logBaseDirPath = string.Empty;
+
+        private static string GetBaseDirPath()
+        {
+            if (!string.IsNullOrEmpty(_logBaseDirPath))
+            {
+                return _logBaseDirPath;
+            }
+
+            _logBaseDirPath = Path.Combine(AppContext.BaseDirectory, "logs");
+
+            if (!Directory.Exists(_logBaseDirPath))
+                Directory.CreateDirectory(_logBaseDirPath);
+
+            return _logBaseDirPath;
+        }
+
     }
 }
