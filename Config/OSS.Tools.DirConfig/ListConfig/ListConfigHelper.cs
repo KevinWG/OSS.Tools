@@ -57,7 +57,7 @@ public static class ListConfigHelper
     /// <param name="sourceName">来源名称</param>
     /// <typeparam name="TConfig">配置信息类型</typeparam>
     /// <returns></returns>
-    public static Task<List<ItemConfig<TConfig>>?> GetList<TConfig>(string listKey, string sourceName = "")
+    public static Task<List<ItemConfig<TConfig>>> GetList<TConfig>(string listKey, string sourceName = "")
     {
         return GetDirConfig(sourceName).GetList<TConfig>(listKey, sourceName);
     }

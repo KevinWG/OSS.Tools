@@ -20,7 +20,7 @@ public interface IToolListConfig
     /// <param name="sourceName">来源名称</param>
     /// <typeparam name="TConfig">配置信息类型</typeparam>
     /// <returns></returns>
-    Task<List<ItemConfig<TConfig>>?> GetList<TConfig>(string listKey, string sourceName);
+    Task<List<ItemConfig<TConfig>>> GetList<TConfig>(string listKey, string sourceName);
 
     /// <summary>
     /// 获取列表数量
