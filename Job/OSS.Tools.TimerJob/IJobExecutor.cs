@@ -6,14 +6,15 @@
     public interface IJobExecutor
     {
         /// <summary>
+        ///  任务名称
+        /// </summary>
+        string JobName { get; }
+
+        /// <summary>
         ///  运行状态
         /// </summary>
         StatusFlag StatusFlag { get; }
 
-        /// <summary>
-        ///  工作名称
-        /// </summary>
-        string JobName { get; }
 
         /// <summary>
         /// 开始任务
@@ -25,6 +26,7 @@
         /// </summary>
         Task StopAsync(CancellationToken cancellationToken);
     }
+
 
     /// <summary>
     ///  状态标识
@@ -55,16 +57,17 @@
     internal class InternalExecutor : BaseJobExecutor
     {
         private readonly Func<CancellationToken, Task> _startAction;
-        private readonly Func<CancellationToken, Task> _stopAction;
+        private readonly Func<CancellationToken, Task>? _stopAction;
            
         /// <inheritdoc />
-        public InternalExecutor(string jobName, Func<CancellationToken, Task> startAction, Func<CancellationToken, Task> stopAction)
+        public InternalExecutor(string jobName, Func<CancellationToken, Task> startAction, Func<CancellationToken, Task>? stopAction)
             :base(jobName)
         {
-            _startAction = startAction;
+            _startAction = startAction ?? throw new ArgumentNullException(nameof(startAction), $"未能设置任务({jobName})有效开始执行方法！");
             _stopAction = stopAction;
         }
-            
+        
+
         protected override Task OnStarting(CancellationToken cancellationToken)
         {
             return _startAction?.Invoke(cancellationToken) ?? Task.CompletedTask;
@@ -74,6 +77,5 @@
         {
             return _stopAction?.Invoke(cancellationToken) ?? Task.CompletedTask;
         }
-      
     }
 }

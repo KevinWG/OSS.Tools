@@ -5,12 +5,23 @@
 ///  从 GetExecuteSource() 获取执行数据源，循环并通过 ExecuteItem() 执行个体任务，直到没有数据源返回
 ///       如果执行时间过长，重复触发同一实例时 如果当前任务还在进行中，则不做任何处理
 /// </summary>
-public abstract class BaseListJobExecutor<T> : Internal_BaseExecutor
+public abstract class BaseListJobExecutor<T> : Internal_BaseExecutor, IJobExecutor
 {
+    /// <inheritdoc/>
+    public string JobName { get; }
 
     private readonly bool _isExecuteOnce;
 
-
+    /// <summary>
+    ///  列表任务执行者
+    /// </summary>
+    /// <param name="jobName"></param>
+    /// <param name="getSourceOnce">是否只获取一次数据源</param>
+    protected BaseListJobExecutor(string jobName, bool getSourceOnce) //: base(jobName)
+    {
+        JobName        = jobName;
+        _isExecuteOnce = getSourceOnce;
+    }
     /// <summary>
     ///  列表任务执行者
     /// </summary>
@@ -18,28 +29,18 @@ public abstract class BaseListJobExecutor<T> : Internal_BaseExecutor
     {
     }
 
-    /// <summary>
-    ///  列表任务执行者
-    /// </summary>
-    /// <param name="jobName"></param>
-    /// <param name="getSourceOnce">是否只获取一次数据源</param>
-    protected BaseListJobExecutor(string jobName, bool getSourceOnce) : base(jobName)
-    {
-        _isExecuteOnce = getSourceOnce;
-    }
-
     #region 任务接口实现
 
 
     internal override async Task InternalStartJob(CancellationToken cancellationToken)
     {
-        var          pageIndex = 0;
+        var      pageIndex = 0;
         IList<T> list; // 结清实体list
 
-        await OnBegin();
+        await OnBegin(cancellationToken);
 
         while (IsStillRunning(cancellationToken)
-               && (list = await GetExecuteSource(pageIndex++))?.Count > 0)
+            && (list = await GetExecuteSource(pageIndex++))?.Count > 0)
         {
             for (var i = 0; IsStillRunning(cancellationToken) && i < list?.Count; i++)
             {
@@ -52,13 +53,13 @@ public abstract class BaseListJobExecutor<T> : Internal_BaseExecutor
             }
         }
 
-        await OnEnd();
+        await OnEnd(cancellationToken);
     }
 
     private bool IsStillRunning(CancellationToken cancellationToken)
     {
         return StatusFlag == StatusFlag.Running
-               && !cancellationToken.IsCancellationRequested;
+            && !cancellationToken.IsCancellationRequested;
     }
 
     #endregion
@@ -82,7 +83,7 @@ public abstract class BaseListJobExecutor<T> : Internal_BaseExecutor
     /// <summary>
     ///  此轮任务开始
     /// </summary>
-    protected virtual Task OnBegin()
+    protected virtual Task OnBegin(CancellationToken cancellationToken)
     {
         return Task.CompletedTask;
     }
@@ -90,12 +91,13 @@ public abstract class BaseListJobExecutor<T> : Internal_BaseExecutor
     /// <summary>
     ///  此轮任务开始
     /// </summary>
-    protected virtual Task OnEnd()
+    protected virtual Task OnEnd(CancellationToken cancellationToken)
     {
         return Task.CompletedTask;
     }
 
     #endregion
+
 
 }
 

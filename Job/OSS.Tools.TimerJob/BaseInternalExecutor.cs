@@ -4,44 +4,27 @@
     /// 任务基类
     ///       如果执行时间过长，重复触发时 当前任务还在进行中，则不做任何处理
     /// </summary>
-    public abstract class Internal_BaseExecutor : IJobExecutor
+    public abstract class Internal_BaseExecutor 
     {
-        private bool _isRunning = false;
-        private bool _jobCommandStarted = false;
+        #region 接口定义实现
+
+        private bool _isRunning;
+        private bool _jobCommandStarted;
 
         /// <summary>
-        /// 构造函数
-        /// </summary>
-        /// <param name="jobName"></param>
-        protected Internal_BaseExecutor(string jobName) => JobName = jobName;
-
-        /// <summary>
-        /// 任务名称
-        /// </summary>
-        public string JobName { get; protected set; } 
-
-        /// <summary>
-        ///  运行状态
+        ///  任务运行状态
         /// </summary>
         public StatusFlag StatusFlag
         {
             get
             {
-                if (_jobCommandStarted && _isRunning)
-                    return StatusFlag.Running;
-                if (_jobCommandStarted && !_isRunning)
-                    return StatusFlag.Waiting;
-                if (!_jobCommandStarted && _isRunning)
-                    return StatusFlag.Stopping;
-                return StatusFlag.Stopped;
+                if (_jobCommandStarted)
+                {
+                    return _isRunning ? StatusFlag.Running : StatusFlag.Waiting;
+                }
+
+                return _isRunning ? StatusFlag.Stopping : StatusFlag.Stopped;
             }
-        }
-        /// <summary>
-        ///   开始任务
-        /// </summary>
-        public Task StartAsync()
-        {
-            return StartAsync(CancellationToken.None);
         }
 
         /// <summary>
@@ -54,22 +37,18 @@
                 return;
 
             _isRunning = _jobCommandStarted = true;
-
-            if (!cancellationToken.IsCancellationRequested)
+            try
             {
-                await InternalStartJob(cancellationToken);
+                if (!cancellationToken.IsCancellationRequested)
+                {
+                    await InternalStartJob(cancellationToken);
+                }
             }
-            _isRunning = false;
-        }
-
-        internal abstract Task InternalStartJob(CancellationToken cancellationToken);
-
-        /// <summary>
-        /// 结束任务
-        /// </summary>
-        public Task StopAsync()
-        {
-            return StopAsync(CancellationToken.None);
+            catch
+            {
+                _isRunning = false;
+                throw;
+            }
         }
 
         /// <summary>
@@ -78,20 +57,27 @@
         public Task StopAsync(CancellationToken cancellationToken)
         {
             _jobCommandStarted = false;
-            return OnStopping(cancellationToken);
+            return InternalStopJob(cancellationToken);
         }
 
+        #endregion
+
+        #region 扩展定义(内部)
 
         /// <summary>
-        ///  任务停止
+        /// 启动任务方法（内部扩展）
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        protected virtual Task OnStopping(CancellationToken cancellationToken)
-        {
-            return Task.CompletedTask;
-        }
+        internal abstract Task InternalStartJob(CancellationToken cancellationToken);
 
+        /// <summary>
+        /// 启动任务方法（内部扩展）
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        internal abstract Task InternalStopJob(CancellationToken cancellationToken);
 
+        #endregion
     }
 }
