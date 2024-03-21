@@ -6,7 +6,7 @@
     /// </summary>
     public abstract class Internal_BaseExecutor 
     {
-        #region 接口定义实现
+        #region 开始结束异步方法
 
         private bool _isRunning;
         private bool _jobCommandStarted;
@@ -27,6 +27,7 @@
             }
         }
 
+
         /// <summary>
         ///   开始任务
         /// </summary>
@@ -37,6 +38,7 @@
                 return;
 
             _isRunning = _jobCommandStarted = true;
+
             try
             {
                 if (!cancellationToken.IsCancellationRequested)
@@ -61,6 +63,7 @@
         }
 
         #endregion
+
 
         #region 扩展定义(内部)
 
