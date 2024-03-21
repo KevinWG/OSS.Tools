@@ -13,8 +13,8 @@ public class TimerTriggerSetting
     /// <param name="jobExecutor">工作执行者（StartAsync-定时执行方法，StopAsync-定时器停止执行方法）</param>
     public TimerTriggerSetting(TimeSpan dueTime, TimeSpan periodTime, IJobExecutor jobExecutor)
     {
-        DueTime     = dueTime;
-        PeriodTime  = periodTime;
+        DueTime = dueTime;
+        PeriodTime = periodTime;
         JobExecutor = jobExecutor;
         TriggerName = jobExecutor.JobName;
     }

@@ -3,7 +3,7 @@
 /// <summary>
 ///   任务定时器  基类
 /// </summary>
-public class TimerJobTrigger : Internal_BaseExecutor, IDisposable
+public class TimerTriggerJob : Internal_BaseExecutor, IDisposable
 {
     private Timer? _timer;
     private CancellationToken _cancellationToken = CancellationToken.None;
@@ -19,7 +19,7 @@ public class TimerJobTrigger : Internal_BaseExecutor, IDisposable
     /// 构造函数
     /// </summary>
     /// <param name="setting">触发器配置信息</param>
-    protected TimerJobTrigger(TimerTriggerSetting setting)
+    public TimerTriggerJob(TimerTriggerSetting setting)
     {
         Setting = setting;
     }

@@ -21,6 +21,7 @@
     <ProjectReference Include="..\..\Config\OSS.Tools.Config\OSS.Tools.Config.csproj" />
     <ProjectReference Include="..\..\Config\OSS.Tools.DirConfig\OSS.Tools.DirConfig.csproj" />
     <ProjectReference Include="..\..\Http\OSS.Tools.Http\OSS.Tools.Http.csproj" />
+    <ProjectReference Include="..\..\Job\OSS.Tools.TimerJob\OSS.Tools.TimerJob.csproj" />
     <ProjectReference Include="..\..\Log\OSS.Tools.Log\OSS.Tools.Log.csproj" />
   </ItemGroup>
 

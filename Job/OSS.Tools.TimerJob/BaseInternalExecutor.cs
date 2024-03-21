@@ -51,6 +51,7 @@
                 _isRunning = false;
                 throw;
             }
+            _isRunning = false;
         }
 
         /// <summary>

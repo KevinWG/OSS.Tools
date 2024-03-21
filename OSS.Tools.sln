@@ -35,6 +35,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Excel", "Excel", "{3C5A7A71
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OSS.Tools.Excel", "Excel\OSS.Tools.Excel\OSS.Tools.Excel.csproj", "{D471A2D2-F301-40AC-8453-8E78390A6138}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OSS.Tools.Console", "Tests\OSS.Tools.Console\OSS.Tools.Console.csproj", "{9F06419F-A0BE-439F-B030-28D4C806F587}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,6 +79,10 @@ Global
 		{D471A2D2-F301-40AC-8453-8E78390A6138}.Debug|Any CPU.Build.0 = Release|Any CPU
 		{D471A2D2-F301-40AC-8453-8E78390A6138}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D471A2D2-F301-40AC-8453-8E78390A6138}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F06419F-A0BE-439F-B030-28D4C806F587}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F06419F-A0BE-439F-B030-28D4C806F587}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F06419F-A0BE-439F-B030-28D4C806F587}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F06419F-A0BE-439F-B030-28D4C806F587}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -91,6 +97,7 @@ Global
 		{0D04329D-6702-41AD-B8CC-C274AC4D8BE8} = {B88F34C8-3F81-4CA7-AD6C-03AF909E39F9}
 		{38B1D958-7C81-4889-9B10-FCFEE7625B12} = {32DF53EA-6D4A-4E0D-AF0D-85C5FA700143}
 		{D471A2D2-F301-40AC-8453-8E78390A6138} = {3C5A7A71-4DF6-4CC3-9E3E-709617480E24}
+		{9F06419F-A0BE-439F-B030-28D4C806F587} = {3F7591FA-9F56-4724-8222-144C923744D9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C8EBEE97-F443-4BCA-8A47-5C67E3B3B72C}
