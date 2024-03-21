@@ -11,13 +11,12 @@ public class TimerTriggerSetting
     /// <param name="dueTime">开始执行时间</param>
     /// <param name="periodTime">间隔时间</param>
     /// <param name="jobExecutor">工作执行者（StartAsync-定时执行方法，StopAsync-定时器停止执行方法）</param>
-    /// <param name="triggerName">触发器名称</param>
-    public TimerTriggerSetting(TimeSpan dueTime, TimeSpan periodTime, IJobExecutor jobExecutor, string triggerName = "")
+    public TimerTriggerSetting(TimeSpan dueTime, TimeSpan periodTime, IJobExecutor jobExecutor)
     {
         DueTime     = dueTime;
         PeriodTime  = periodTime;
         JobExecutor = jobExecutor;
-        TriggerName = triggerName;
+        TriggerName = jobExecutor.JobName;
     }
 
     /// <summary>
@@ -30,7 +29,7 @@ public class TimerTriggerSetting
     /// <param name="triggerName">触发器名称</param>
     protected TimerTriggerSetting(TimeSpan dueTime, TimeSpan periodTime, 
         Func<CancellationToken, Task> executingAction, Func<CancellationToken, Task>? stopAction, string triggerName = "")
-        : this(dueTime, periodTime, new InternalExecutor(triggerName, executingAction, stopAction), triggerName)
+        : this(dueTime, periodTime, new InternalTimerExecutor(triggerName, executingAction, stopAction))
     {
     }
 

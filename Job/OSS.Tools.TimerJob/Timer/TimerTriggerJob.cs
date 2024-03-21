@@ -5,11 +5,11 @@
 /// </summary>
 public class TimerJobTrigger : Internal_BaseExecutor, IDisposable
 {
-    private Timer?            _timer;
-    private CancellationToken _cancellationToken =CancellationToken.None;
+    private Timer? _timer;
+    private CancellationToken _cancellationToken = CancellationToken.None;
 
     #region 构造函数
-        
+
     /// <summary>
     /// 触发器配置信息
     /// </summary>
@@ -21,7 +21,7 @@ public class TimerJobTrigger : Internal_BaseExecutor, IDisposable
     /// <param name="setting">触发器配置信息</param>
     protected TimerJobTrigger(TimerTriggerSetting setting)
     {
-        Setting     = setting;
+        Setting = setting;
     }
 
     #endregion

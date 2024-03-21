@@ -53,29 +53,4 @@
         /// </summary>
         Stopped
     }
-
-    internal class InternalExecutor : BaseJobExecutor
-    {
-        private readonly Func<CancellationToken, Task> _startAction;
-        private readonly Func<CancellationToken, Task>? _stopAction;
-           
-        /// <inheritdoc />
-        public InternalExecutor(string jobName, Func<CancellationToken, Task> startAction, Func<CancellationToken, Task>? stopAction)
-            :base(jobName)
-        {
-            _startAction = startAction ?? throw new ArgumentNullException(nameof(startAction), $"未能设置任务({jobName})有效开始执行方法！");
-            _stopAction = stopAction;
-        }
-        
-
-        protected override Task OnStarting(CancellationToken cancellationToken)
-        {
-            return _startAction?.Invoke(cancellationToken) ?? Task.CompletedTask;
-        }
-
-        protected override Task OnStopping(CancellationToken cancellationToken)
-        {
-            return _stopAction?.Invoke(cancellationToken) ?? Task.CompletedTask;
-        }
-    }
 }
