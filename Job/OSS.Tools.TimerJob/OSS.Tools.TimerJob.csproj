@@ -9,7 +9,7 @@
 		<PackageIconUrl>http://img1.osscore.cn/static/oss_net.png</PackageIconUrl>
 		<Authors>OSSCore</Authors>
 		<Description>Timer Job 基础类封装实现</Description>
-		<Version>3.2</Version>
+		<Version>3.2.1</Version>
 		<PackageReleaseNotes>底层统一基类</PackageReleaseNotes>
 		<AssemblyVersion>1.0.2.0</AssemblyVersion>
 		<FileVersion>1.0.2.0</FileVersion>

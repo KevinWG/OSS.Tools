@@ -27,8 +27,7 @@ public class TimerTriggerSetting
     /// <param name="executingAction">定时执行方法</param>
     /// <param name="stopAction">定时器停止执行方法</param>
     /// <param name="triggerName">触发器名称</param>
-    protected TimerTriggerSetting(TimeSpan dueTime, TimeSpan periodTime, 
-        Func<CancellationToken, Task> executingAction, Func<CancellationToken, Task>? stopAction, string triggerName = "")
+    public TimerTriggerSetting(TimeSpan dueTime, TimeSpan periodTime, Func<CancellationToken, Task> executingAction, Func<CancellationToken, Task>? stopAction, string triggerName = "")
         : this(dueTime, periodTime, new InternalTimerExecutor(triggerName, executingAction, stopAction))
     {
     }
@@ -40,7 +39,7 @@ public class TimerTriggerSetting
     /// <param name="periodTime">间隔时间</param>
     /// <param name="executingAction">定时执行方法</param>
     /// <param name="triggerName">触发器名称</param>
-    protected TimerTriggerSetting(TimeSpan dueTime, TimeSpan periodTime, Func<CancellationToken, Task> executingAction, string triggerName = "")
+    public TimerTriggerSetting(TimeSpan dueTime, TimeSpan periodTime, Func<CancellationToken, Task> executingAction, string triggerName = "")
         : this(dueTime, periodTime, executingAction, null, triggerName)
     {
     }
