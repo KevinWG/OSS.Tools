@@ -27,7 +27,6 @@
             }
         }
 
-
         /// <summary>
         ///   开始任务
         /// </summary>
@@ -59,7 +58,7 @@
         /// </summary>
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            _jobCommandStarted = false;
+            _isRunning = _jobCommandStarted = false;
             return InternalStopJob(cancellationToken);
         }
 
