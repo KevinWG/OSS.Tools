@@ -52,7 +52,7 @@ namespace OSS.Tools.Log
         /// <param name="msg"> 日志信息  </param>
         /// <param name="msgKey">  关键值  </param>
         /// <param name="sourceName"> 来源名称 </param>
-        public static Task<string?> Info(object msg, string? msgKey = null, string? sourceName = "")
+        public static Task<string?> Info(object msg, string? msgKey = null, string sourceName = "")
         {
             return Log(new LogInfo(LogLevelEnum.Info, msg, msgKey, sourceName));
         }
