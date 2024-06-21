@@ -33,14 +33,25 @@ namespace OSS.Tools.Http
         {
             address_url = reqUrl;
         }
-        
+
+        /// <summary>
+        /// 请求构造函数
+        /// </summary>
+        /// <param name="reqUrl">请求地址</param>
+        /// <param name="httpMethod">请求方式</param>
+        public OssHttpRequest(string reqUrl,HttpMethod httpMethod)
+        {
+            address_url = reqUrl;
+            http_method = httpMethod;
+        }
+
         /// <summary>
         ///  如果此值设置
         /// </summary>
         public string address_url { get; set; } = string.Empty;
 
         /// <summary>
-        /// 请求方式
+        /// 请求方式，默认 Get 请求
         /// </summary>
         public HttpMethod http_method { get; set; } = HttpMethod.Get;
 
@@ -87,6 +98,9 @@ namespace OSS.Tools.Http
 
         #region   请求的内容参数
 
+
+        internal string? HeaderAuthorization;
+
         internal List<FileParameter>? FileParameters;
         internal List<NameValuePair>? FormParameters;
         
@@ -131,5 +145,16 @@ namespace OSS.Tools.Http
 
             return req;
         }
+
+        /// <summary>
+        ///  设置头部授权信息
+        /// </summary>
+        public static OssHttpRequest WithHeaderAuthorization(this OssHttpRequest req, string authorizationValue)
+        {
+            req.HeaderAuthorization=authorizationValue;
+
+            return req;
+        }
+
     }
 }

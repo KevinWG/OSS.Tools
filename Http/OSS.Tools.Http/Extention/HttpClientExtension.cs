@@ -132,6 +132,12 @@ namespace OSS.Tools.Http
         /// <returns></returns>
         private static void PackageReqContent(HttpRequestMessage reqMsg, OssHttpRequest req)
         {
+            if (!string.IsNullOrEmpty(req.HeaderAuthorization))
+            {
+                reqMsg.Headers.Remove("Authorization");
+                reqMsg.Headers.TryAddWithoutValidation("Authorization", req.HeaderAuthorization);
+            }
+
             if (req.http_method == HttpMethod.Get)
                 return;
 
