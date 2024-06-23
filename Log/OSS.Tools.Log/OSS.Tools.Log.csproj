@@ -4,13 +4,21 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Version>2.1</Version>
+		<Version>2.1.0.1</Version>
 		<PackageProjectUrl>https://github.com/KevinWG/OSS.Tools</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/KevinWG/OSS.Tools</RepositoryUrl>
 		<PackageIconUrl>http://img1.osscore.cn/static/oss_net.png</PackageIconUrl>
 		<Authors>OSSCore</Authors>
 		<Description>日志操作管理类库</Description>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<PackageIcon>logo.png</PackageIcon>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Include="..\..\logo.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
 
 </Project>

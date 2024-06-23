@@ -11,9 +11,17 @@
 		<Authors>OSSCore</Authors>
 		<Company>OSSCore</Company>
 		<Description>HTTP请求工具类库</Description>
-		<Version>3.0.1</Version>
+		<Version>3.0.1.1</Version>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<PackageIcon>logo.png</PackageIcon>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Include="..\..\logo.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
